@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<otrs_config version="1.0" init="Application">
+    <ConfigItem Name="Frontend::Output::FilterElementPost###OutputFilterTicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Module to show checklists in tickets.</Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>OutputFilter</SubGroup>
+        <Setting>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::OutputFilterTicketChecklist</Item>
+                <Item Key="Debug">0</Item>
+                <Item Key="Templates">
+                    <Hash>
+                        <Item Key="AgentITSMWorkOrderZoom">1</Item>
+                    </Hash>
+                </Item>
+            </Hash>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Ticket::Frontend::MenuModule###212-Checklist" Required="0" Valid="1">
+        <Description Translatable="1">Shows a link in the menu to print a ticket or an article in the ticket zoom view of the agent interface.</Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>Frontend::Agent::Ticket::MenuModule</SubGroup>
+        <Setting>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::TicketMenuGeneric</Item>
+                <Item Key="Name">Checklist</Item>
+                <Item Key="Description" Translatable="1">Maintain checklist for the ticket</Item>
+                <Item Key="Action">AgentTicketChecklist</Item>
+                <Item Key="Link">Action=AgentTicketChecklist;TicketID=$QData{"TicketID"}</Item>
+                <Item Key="LinkParam"></Item>
+                <Item Key="Target"></Item>
+                <Item Key="PopupType">TicketAction</Item>
+            </Hash>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="TicketChecklist::Debug" Required="0" Valid="1">
+        <Description Translatable="1">Enable/Disable debugging feature.</Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>Core</SubGroup>
+        <Setting>
+            <Option SelectedID="0">
+                <Item Key="0">No</Item>
+                <Item Key="1">Yes</Item>
+            </Option>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="TicketChecklist::DefaultState" Required="0" Valid="1">
+        <Description Translatable="1"></Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>Checklist</SubGroup>
+        <Setting>
+            <String Regex="">created</String>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Frontend::Module###AgentTicketChecklist" Required="0" Valid="1">
+        <Description Lang="en">Frontend module registration for ticket checklist module.</Description>
+        <Description Lang="de">Frontendmodul-Registration für das Checklisten-Modul.</Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
+        <Setting>
+            <FrontendModuleReg>
+                <Group>users</Group>
+                <Description>Maintain ticket checklists.</Description>
+                <NavBarName>Ticket</NavBarName>
+                <Title>Maintain ticket checklists.</Title>
+            </FrontendModuleReg>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Frontend::Module###AdminTicketChecklistStates" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the checklist state administration.</Description>
+        <Group>TicketChecklist</Group>
+        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+        <Setting>
+            <FrontendModuleReg>
+                <Group>admin</Group>
+                <Description>Create and manage checklist states.</Description>
+                <Title>Checklist States</Title>
+                <NavBarName>Admin</NavBarName>
+                <NavBarModule>
+                    <Module>Kernel::Output::HTML::NavBarModuleAdmin</Module>
+                    <Name Translatable="1">Checklist States</Name>
+                    <Description Translatable="1">Create and manage checklist states.</Description>
+                    <Block>System</Block>
+                    <Prio>99102</Prio>
+                </NavBarModule>
+            </FrontendModuleReg>
+        </Setting>
+    </ConfigItem>
+</otrs_config>

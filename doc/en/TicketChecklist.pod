@@ -1,0 +1,59 @@
+=head1 NAME
+
+TicketChecklist - Have a checklist for you todos with regard to the ticket
+
+=head1 DESCRIPTION
+
+There can be several tasks mentioned in a ticket and when the ticket gets
+more and more followups, it might be hard to remember what should be done
+to solve the issue.
+
+In that case a "TODO" list or a checklist would be helpful. As soon as
+the ticket owner identifies a task that has to be done, that task can be
+added to the checklist.
+
+Such a checklist is provided by this addon. A new item in the ticket menu
+appears: "Checklist".
+
+As soon as a checklist for a ticket exists, you'll see a new widget in the
+ticket zoom. Near by the ticket information the checklist is shown. 
+
+You can see a few screenshots at
+L<http://feature-addons.de/otrs/Ticket%20Zoom/TicketChecklist> (even though
+a some screenshots there are for the pro version).
+
+=head1 SUPPORT
+
+If you have any questions, ideas for new features, bugreports and/or patches,
+please drop me a line at otrs@perl-services.de.
+
+I do not read the comments here regularly...
+
+=head1 PRO-VERSION
+
+There is a pro version available at 
+L<http://feature-addons.de/otrs/Ticket%20Zoom/TicketChecklist> that
+have a few more features:
+
+=over 4
+
+=item * Priorities for checklist items
+
+=item * Responsibles for checklist items
+
+=item * Due dates for checklist items
+
+=item * Notifications for ticket owner when a checklist item is set to a new (configurable) state
+
+=item * Overview of tickets that have open checklist items
+
+=item * change order (position) of the checklist items
+
+=back
+
+=head1 AUTHOR AND LICENSE
+
+This module is licensed under the terms of AGPL 3.0.
+
+Author: Renee Bäcker C<< <otrs@perl-services.de> >>
+

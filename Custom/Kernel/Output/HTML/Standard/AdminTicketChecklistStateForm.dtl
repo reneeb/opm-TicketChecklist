@@ -1,0 +1,93 @@
+# --
+# AgentTicketChecklistStateForm.dtl - provides HTML form for ticket checklist states
+# Copyright (C) 2014 Perl-Services.de, http://www.perl-services.de
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+$Include{"AgentCustomerSearch"}
+
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
+    <h1>$Text{"Checklist Item State Management"}</h1>
+    <div class="SidebarColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>$Text{"Actions"}</h2>
+            </div>
+            <div class="Content">
+                <ul class="ActionList">
+                    <li>
+                        <a href="$Env{"Baselink"}Action=$Env{"Action"}" class="CallForAction"><span>$Text{"Go to overview"}</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="ContentColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>$Text{"Add/Change States"}</h2>
+            </div>
+            <div class="Content">
+                <form action="$Env{"CGIHandle"}" method="post" class="Validate">
+
+                    <input type="hidden" name="Action" value="$Env{"Action"}"/>
+                    <input type="hidden" name="Subaction" value="$QData{"Subaction"}"/>
+                    <input type="hidden" name="ID" value="$QData{"ID"}"/>
+
+                    <fieldset class="TableLike">
+                        <label for="Name" class="Mandatory">
+                            <span class="Marker">*</span>
+                            $Text{"Name"}:
+                        </label>
+                        <div class="Field">
+                            <input type="text" id="Name" name="Name" value="$QData{"Name"}" class="W75pc Validate_Required $QData{"NameInvalid"}"/>
+                            <div id="NameError" class="TooltipErrorMessage">
+                                <p>$Text{"A name is required."}</p>
+                            </div>
+                            <div id="NameServerError" class="TooltipErrorMessage">
+                                <p>$Text{"A name is required."}</p>
+                            </div>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="Color" class="Mandatory">
+                            <span class="Marker">*</span>
+                            $Text{"Color"}:
+                        </label>
+                        <div class="Field">
+                            <input type="text" id="Color" name="Color" value="$QData{"Color"}" class="W75pc Validate_Required $QData{"ColorInvalid"}"/>
+                            <div id="ColorError" class="TooltipErrorMessage">
+                                <p>$Text{"A color is required."}</p>
+                            </div>
+                            <div id="ColorServerError" class="TooltipErrorMessage">
+                                <p>$Text{"A color is required."}</p>
+                            </div>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ValidID" class="Mandatory">
+                            <span class="Marker">*</span>
+                            $Text{"Valid"}:
+                        </label>
+                        <div class="Field">
+                            $Data{"ValidSelect"}
+                        </div>
+                        <div class="Clear"></div>
+
+                        <div class="Field">
+                            <button class="Primary" type="submit" value="$Text{"Save"}">$Text{"Save"}</button>
+                            $Text{"or"}
+                            <a href="$Env{"Baselink"}Action=$Env{"Action"}">$Text{"Cancel"}</a>
+                        </div>
+                        <div class="Clear"></div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="Clear"></div>
+</div>

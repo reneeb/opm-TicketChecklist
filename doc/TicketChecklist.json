@@ -1,0 +1,143 @@
+{
+    "name": "TicketChecklist",
+    "version": "0.3.1",
+    "framework": [
+        "3.3.x"
+    ],
+    "vendor": {
+        "name":  "Perl-Services.de",
+        "url": "http://www.perl-services.de"
+    },
+    "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
+    "description" : {
+        "en": "Add a checklist to tickets",
+        "de": "Eine Checkliste für Tickets"
+    },
+    "database" : [
+       {
+            "type": "TableCreate",
+            "version": 0,
+            "name": "ps_ticketchecklist",
+            "columns": [
+                { "name": "id", "required": "true", "auto_increment": "true", "type": "INTEGER", "primary_key": "true" },
+                { "name": "title", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "position", "required": "true", "type": "SMALLINT" },
+                { "name": "status_id", "required": "false", "type": "SMALLINT" },
+                { "name": "ticket_id", "required": "true", "type": "SMALLINT" },
+                { "name": "create_time", "required": "true", "type": "DATE" },
+                { "name": "create_by", "required": "true", "type": "INTEGER" },
+                { "name": "change_time", "required": "true", "type": "DATE" },
+                { "name": "change_by", "required": "true", "type": "INTEGER" }
+            ],
+            "keys" : [
+                {
+                    "name": "users",
+                    "references": [
+                        { "local": "create_by", "foreign": "id" },
+                        { "local": "change_by", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "ps_ticketchecklist_status",
+                    "references": [
+                        { "local": "status_id", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "ticket",
+                    "references": [
+                        { "local": "ticket_id", "foreign": "id" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "TableCreate",
+            "version": 0,
+            "name": "ps_ticketchecklist_status",
+            "columns": [
+                { "name": "id", "required": "true", "auto_increment": "true", "type": "INTEGER", "primary_key": "true" },
+                { "name": "name", "required": "true", "type": "VARCHAR", "size": 150 },
+                { "name": "color", "required": "true", "type": "VARCHAR", "size": 10 },
+                { "name": "valid_id", "required": "true", "type": "SMALLINT" },
+                { "name": "create_time", "required": "true", "type": "DATE" },
+                { "name": "create_by", "required": "true", "type": "INTEGER" },
+                { "name": "change_time", "required": "true", "type": "DATE" },
+                { "name": "change_by", "required": "true", "type": "INTEGER" }
+            ],
+            "keys" : [
+                {
+                    "name": "users",
+                    "references": [
+                        { "local": "create_by", "foreign": "id" },
+                        { "local": "change_by", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "valid",
+                    "references": [
+                        { "local": "valid_id", "foreign": "id" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Insert",
+            "name": "ps_ticketchecklist_status",
+            "version": 0,
+            "columns": [
+                { "name": "name", "type": "Quote", "value": "open" },
+                { "name": "valid_id", "value": "1" },
+                { "name": "color", "value": "gray", "type": "Quote" },
+                { "name": "create_time", "value": "current_timestamp" },
+                { "name": "create_by", "value": "1" },
+                { "name": "change_time", "value": "current_timestamp" },
+                { "name": "change_by", "value": "1" }
+            ]
+        },
+        {
+            "type": "Insert",
+            "name": "ps_ticketchecklist_status",
+            "version": 0,
+            "columns": [
+                { "name": "name", "type": "Quote", "value": "done" },
+                { "name": "valid_id", "value": "1" },
+                { "name": "color", "value": "green", "type":"Quote" },
+                { "name": "create_time", "value": "current_timestamp" },
+                { "name": "create_by", "value": "1" },
+                { "name": "change_time", "value": "current_timestamp" },
+                { "name": "change_by", "value": "1" }
+            ]
+        },
+        {
+            "type": "Insert",
+            "name": "ps_ticketchecklist_status",
+            "version": 0,
+            "columns": [
+                { "name": "name", "type": "Quote", "value": "rejected" },
+                { "name": "color", "value": "red", "type": "Quote" },
+                { "name": "create_time", "value": "current_timestamp" },
+                { "name": "create_by", "value": "1" },
+                { "name": "change_time", "value": "current_timestamp" },
+                { "name": "change_by", "value": "1" },
+                { "name": "valid_id", "value": "1" }
+            ]
+        }
+    ],
+    "intro": [
+        {
+            "type": "Install", 
+            "version": 0,
+            "text": ""
+        },
+        {
+            "type": "Install", 
+            "version": 0,
+            "text": ""
+        }
+    ],
+    "code": [
+        { "type": "Install", "version": 0 },
+        { "type": "Upgrade", "version": 0 }
+    ]
+}

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_package version="1.0">
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.21) -->
+    <Name>TicketChecklist</Name>
+    <Version>3.3.1</Version>
+    <Framework>3.3.x</Framework>
+    <Vendor>Perl-Services.de</Vendor>
+    <URL>http://www.perl-services.de</URL>
+    <Description Lang="de">Eine Checkliste für Tickets</Description>
+    <Description Lang="en">Add a checklist to tickets</Description>
+    <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
+    <Filelist>
+        <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateForm.dtl" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateList.dtl" />
+        <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklist.pm" />
+        <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistStatus.pm" />
+        <File Permission="644" Location="Kernel/Config/Files/TicketChecklist.xml" />
+        <File Permission="644" Location="doc/TicketChecklist.json" />
+    </Filelist>
+    <DatabaseInstall Type="post">
+        <TableCreate Name="ps_ticketchecklist">
+            <Column Name="id" Required="true" Type="INTEGER" AutoIncrement="true" PrimaryKey="true" />
+            <Column Name="title" Required="false" Type="VARCHAR" Size="250" />
+            <Column Name="due_date" Required="false" Type="DATE" />
+            <Column Name="position" Required="true" Type="SMALLINT" />
+            <Column Name="user_id" Required="true" Type="SMALLINT" />
+            <Column Name="status_id" Required="false" Type="SMALLINT" />
+            <Column Name="ticket_id" Required="true" Type="SMALLINT" />
+            <Column Name="create_time" Required="true" Type="DATE" />
+            <Column Name="create_by" Required="true" Type="INTEGER" />
+            <Column Name="change_time" Required="true" Type="DATE" />
+            <Column Name="change_by" Required="true" Type="INTEGER" />
+            <ForeignKey ForeignTable="users">
+                <Reference Local="user_id" Foreign="id" />
+                <Reference Local="create_by" Foreign="id" />
+                <Reference Local="change_by" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="ps_ticketchecklist_status">
+                <Reference Local="status_id" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="ticket">
+                <Reference Local="ticket_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
+        <TableCreate Name="ps_ticketchecklist_status">
+            <Column Name="id" Required="true" Type="INTEGER" AutoIncrement="true" PrimaryKey="true" />
+            <Column Name="name" Required="true" Type="VARCHAR" Size="150" />
+            <Column Name="color" Required="true" Type="VARCHAR" Size="10" />
+            <Column Name="valid_id" Required="true" Type="SMALLINT" />
+            <Column Name="create_time" Required="true" Type="DATE" />
+            <Column Name="create_by" Required="true" Type="INTEGER" />
+            <Column Name="change_time" Required="true" Type="DATE" />
+            <Column Name="change_by" Required="true" Type="INTEGER" />
+            <ForeignKey ForeignTable="users">
+                <Reference Local="create_by" Foreign="id" />
+                <Reference Local="change_by" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="valid">
+                <Reference Local="valid_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
+        <Insert Table="ps_ticketchecklist_status">
+            <Data Key="name" Type="Quote"><![CDATA[open]]></Data>
+            <Data Key="valid_id">1</Data>
+            <Data Key="color" Type="Quote"><![CDATA[gray]]></Data>
+            <Data Key="create_time">current_timestamp</Data>
+            <Data Key="create_by">1</Data>
+            <Data Key="change_time">current_timestamp</Data>
+            <Data Key="change_by">1</Data>
+        </Insert>
+        <Insert Table="ps_ticketchecklist_status">
+            <Data Key="name" Type="Quote"><![CDATA[done]]></Data>
+            <Data Key="valid_id">1</Data>
+            <Data Key="color" Type="Quote"><![CDATA[green]]></Data>
+            <Data Key="create_time">current_timestamp</Data>
+            <Data Key="create_by">1</Data>
+            <Data Key="change_time">current_timestamp</Data>
+            <Data Key="change_by">1</Data>
+        </Insert>
+        <Insert Table="ps_ticketchecklist_status">
+            <Data Key="name" Type="Quote"><![CDATA[rejected]]></Data>
+            <Data Key="color" Type="Quote"><![CDATA[red]]></Data>
+            <Data Key="create_time">current_timestamp</Data>
+            <Data Key="create_by">1</Data>
+            <Data Key="change_time">current_timestamp</Data>
+            <Data Key="change_by">1</Data>
+            <Data Key="valid_id">1</Data>
+        </Insert>
+    </DatabaseInstall>
+    <DatabaseUninstall Type="pre">
+        <TableDrop Name="ps_ticketchecklist" />
+        <TableDrop Name="ps_ticketchecklist_status" />
+    </DatabaseUninstall>
+    <CodeInstall Type="post"><![CDATA[
+        # define function name
+        my $FunctionName = 'CodeInstall';
+
+        # create the package name
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+
+        # load the module
+        if ( $Self->{MainObject}->Require($CodeModule) ) {
+
+            # create new instance
+            my $CodeObject = $CodeModule->new( %{$Self} );
+
+            if ($CodeObject) {
+
+                # start methode
+                if ( !$CodeObject->$FunctionName(%{$Self}) ) {
+                    $Self->{LogObject}->Log(
+                        Priority => 'error',
+                        Message  => "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+
+            # error handling
+            else {
+                $Self->{LogObject}->Log(
+                    Priority => 'error',
+                    Message  => "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+
+    ]]></CodeInstall>
+    <CodeUpgrade Type="post"><![CDATA[
+        # define function name
+        my $FunctionName = 'CodeUpgrade';
+
+        # create the package name
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}->{Name}->{Content};
+
+        # load the module
+        if ( $Self->{MainObject}->Require($CodeModule) ) {
+
+            # create new instance
+            my $CodeObject = $CodeModule->new( %{$Self} );
+
+            if ($CodeObject) {
+
+                # start methode
+                if ( !$CodeObject->$FunctionName(%{$Self}) ) {
+                    $Self->{LogObject}->Log(
+                        Priority => 'error',
+                        Message  => "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+
+            # error handling
+            else {
+                $Self->{LogObject}->Log(
+                    Priority => 'error',
+                    Message  => "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+
+    ]]></CodeUpgrade>
+    <IntroInstall Type="post"><![CDATA[
+            
+    ]]></IntroInstall>
+    <IntroInstall Type="post"><![CDATA[
+            
+    ]]></IntroInstall>
+</otrs_package>
