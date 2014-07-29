@@ -94,7 +94,6 @@ Add time tracking
         Title    => 'tracking title', # (optional)
         Status   => 'open',  # or StatusID => 1,
         UserID   => 123,
-        AgentID  => 123,
     );
 
 =cut
@@ -103,7 +102,7 @@ sub TicketChecklistAdd {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    for my $Needed ( qw(TicketID Title ValidID UserID Position) ) {
+    for my $Needed ( qw(TicketID Title UserID Position) ) {
         if ( !$Param{$Needed} ) {
             $Self->{LogObject}->Log(
                 Priority => 'error',
@@ -140,14 +139,13 @@ sub TicketChecklistAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_ticketchecklist '
             . '(title, position, status_id, ticket_id, '
-            . ' valid_id, create_time, create_by, change_time, change_by) '
-            . 'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, current_timestamp, ?, current_timestamp, ?)',
+            . ' create_time, create_by, change_time, change_by) '
+            . 'VALUES (?, ?, ?, ?, current_timestamp, ?, current_timestamp, ?)',
         Bind => [
             \$Param{Title},
             \$Param{Position},
             \$Param{StatusID},
             \$Param{TicketID},
-            \$Param{ValidID},
             \$Param{UserID},
             \$Param{UserID},
         ],
@@ -180,10 +178,10 @@ sub TicketChecklistAdd {
 to update news 
 
     my $Success = $TicketChecklistObject->TicketChecklistUpdate(
-        ID            => 3,
-        Title         => 'A title',
-        ValidID       => 1,
-        UserID        => 123,
+        ID       => 3,
+        TicketID => 1235,
+        Title    => 'tracking title', # (optional)
+        Status   => 'open',  # or StatusID => 1,
     );
 
 =cut
@@ -192,7 +190,7 @@ sub TicketChecklistUpdate {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    for my $Needed (qw(ID ObjectType ObjectID ValidID UserID)) {
+    for my $Needed (qw(ID TicketID Title UserID)) {
         if ( !$Param{$Needed} ) {
             $Self->{LogObject}->Log(
                 Priority => 'error',
@@ -202,26 +200,30 @@ sub TicketChecklistUpdate {
         }
     }
 
+    if ( !$Param{Status} && !$Param{StatusID} ) {
+        $Self->{LogObject}->Log(
+            Priority => 'error',
+            Message  => 'Need either Status or StatusID',
+        );
+
+        return;
+    }
+
+    if ( $Param{Status} ) {
+        $Param{StatusID} = $Self->{StatusObject}->TicketChecklistStatusLookup( Name => $Param{Status} );
+    }
+
     # insert new news
     return if !$Self->{DBObject}->Do(
-        SQL => 'UPDATE ps_time_tracking SET '
-            . 'object_id = ?, object_type = ?, start = ?, stop = ?, comments = ?, '
-            . 'exported = ?, edited = ?, manual = ?, valid_id = ?, user_id = ?, title = ?, '
-            . 'committed = ?, change_time = current_timestamp, change_by = ? '
+        SQL => 'UPDATE ps_ticketchecklist SET '
+            . ' title = ?, position = ?, status_id = ?, ticket_id = ?, '
+            . ' change_time = current_timestamp, change_by = ? '
             . ' WHERE id = ?',
         Bind => [
-            \$Param{ObjectID},
-            \$Param{ObjectType},
-            \$Param{Start},
-            \$Param{Stop},
-            \$Param{Comment},
-            \$Param{Exported},
-            \$Param{Edited},
-            \$Param{Manual},
-            \$Param{ValidID},
-            \$Param{AgentID},
             \$Param{Title},
-            \$Param{Committed},
+            \$Param{Position},
+            \$Param{StatusID},
+            \$Param{TicketID},
             \$Param{UserID},
             \$Param{ID},
         ],
@@ -239,22 +241,14 @@ returns a hash with news data
 This returns something like:
 
     %TicketChecklistData = (
-        ID            => 3,
-        ObjectType    => 'Ticket',
-        ObjectID      => 1235,
-        Start         => 1984756823,
-        Stop          => 1984756823,
-        Comment       => 'A comment',
-        Title         => 'A title',
-        Exported      => 1,
-        Edited        => 1,
-        Manual        => 1,
-        ValidID       => 1,
-        AgentID       => 15,
-        CreateBy      => 354,
-        CreateTime    => '',
-        ChangeBy      => 35,
-        ChangeTime    => '',
+        ID         => 3,
+        TicketID   => 1235,
+        Title      => 'tracking title',
+        Status     => 'open',  # or StatusID => 1,
+        CreateBy   => 354,
+        CreateTime => '',
+        ChangeBy   => 35,
+        ChangeTime => '',
     );
 
 =cut
@@ -273,9 +267,9 @@ sub TicketChecklistGet {
 
     # sql
     return if !$Self->{DBObject}->Prepare(
-        SQL => 'SELECT id, object_type, object_id, start, stop, comments, exported, edited, manual, '
-            . 'valid_id, user_id, create_by, create_time, change_by, change_time, title '
-            . 'FROM ps_time_tracking WHERE id = ?',
+        SQL => 'SELECT id, title, status_id, position, ticket_id, '
+            . 'create_by, create_time, change_by, change_time '
+            . 'FROM ps_ticketchecklist WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
     );
@@ -283,41 +277,19 @@ sub TicketChecklistGet {
     my %TicketChecklist;
     while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
         %TicketChecklist = (
-            ID            => $Data[0],
-            ObjectType    => $Data[1],
-            ObjectID      => $Data[2],
-            Start         => $Data[3],
-            Stop          => $Data[4],
-            Comment       => $Data[5],
-            Exported      => $Data[6],
-            Edited        => $Data[7],
-            Manual        => $Data[8],
-            ValidID       => $Data[9],
-            AgentID       => $Data[10],
-            CreateBy      => $Data[11],
-            CreateTime    => $Data[12],
-            ChangeBy      => $Data[13],
-            ChangeTime    => $Data[14],
-            Title         => $Data[15],
+            ID         => $Data[0],
+            Title      => $Data[1],
+            StatusID   => $Data[2],
+            Position   => $Data[3],
+            TicketID   => $Data[4],
+            CreateBy   => $Data[5],
+            CreateTime => $Data[6],
+            ChangeBy   => $Data[7],
+            ChangeTime => $Data[8],
         );
     }
 
-    if ( $TicketChecklist{ObjectType} && $TicketChecklist{ObjectID} ) {
-        my $Type = $TicketChecklist{ObjectType};
-        $TicketChecklist{Title} = $Self->{ $Type . 'BackendObject' }->GetTitle(
-            ObjectID => $TicketChecklist{ObjectID},
-            UserID   => 1,
-        );
-
-        $TicketChecklist{Subject} = $Self->{ $Type . 'BackendObject' }->GetSubject(
-            ObjectID => $TicketChecklist{ObjectID},
-            UserID   => 1,
-        );
-    }
-
-    $TicketChecklist{Valid}   = $Self->{ValidObject}->ValidLookup( ValidID => $TicketChecklist{ValidID} );
     $TicketChecklist{Creator} = $Self->{UserObject}->UserLookup( UserID => $TicketChecklist{CreateBy} );
-    $TicketChecklist{Agent}   = $Self->{UserObject}->UserLookup( UserID => $TicketChecklist{AgentID} );
 
     return %TicketChecklist;
 }
@@ -336,17 +308,25 @@ sub TicketChecklistDelete {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    if ( !$Param{ID} ) {
+    if ( !$Param{ID} && !$Param{TicketID} ) {
         $Self->{LogObject}->Log(
             Priority => 'error',
-            Message  => 'Need ID!',
+            Message  => 'Need either ID or TicketID!',
         );
         return;
     }
 
+    my $SQL  = 'DELETE FROM ps_ticketchecklist WHERE id = ?';
+    my $Bind = \$Param{ID};
+
+    if ( $Param{TicketID} ) {
+        $SQL  = 'DELETE FROM ps_ticketchecklist WHERE ticket_id = ?';
+        $Bind = \$Param{TicketID};
+    }
+
     return $Self->{DBObject}->Do(
-        SQL  => 'DELETE FROM ps_time_tracking WHERE id = ?',
-        Bind => [ \$Param{ID} ],
+        SQL  => $SQL,
+        Bind => [ $Bind ],
     );
 }
 
@@ -368,9 +348,10 @@ sub TicketChecklistTicketGet {
         }
     }
 
-    my $SQL = 'SELECT id, title, position, status_id, valid_id, ticket_id '
+    my $SQL = 'SELECT id, title, position, status_id, ticket_id '
         . ' FROM ps_ticketchecklist '
-        . ' WHERE ticket_id = ? ';
+        . ' WHERE ticket_id = ? '
+        . ' ORDER BY position ASC';
 
     return if !$Self->{DBObject}->Prepare(
         SQL  => $SQL,
@@ -378,6 +359,19 @@ sub TicketChecklistTicketGet {
             \$Param{TicketID},
         ],
     );
+
+    my @ChecklistItems;
+    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+        push @ChecklistItems, {
+            ID       => $Row[0],
+            Title    => $Row[1],
+            Position => $Row[2],
+            StatusID => $Row[3],
+            TicketID => $Row[4],
+        };
+    }
+
+    return @ChecklistItems;
 }
 
 =item TicketChecklistMerge()
@@ -387,7 +381,7 @@ sub TicketChecklistTicketGet {
 sub TicketChecklistMerge {
     my ($Self, %Param) = @_;
 
-    for my $Needed (qw(ObjectType OldObjectID NewObjectID UserID)) {
+    for my $Needed (qw(NewTicketID OldTicketID)) {
         if ( !$Param{$Needed} ) {
             $Self->{LogObject}->Log(
                 Priority => 'error',
@@ -398,21 +392,17 @@ sub TicketChecklistMerge {
         }
     }
 
-    my $SQL = 'UPDATE ps_time_tracking '
-        . ' SET object_id = ?, change_time = current_timestamp, change_by = ? '
-        . ' WHERE object_type = ? AND object_id = ?';
+    my $SQL = 'UPDATE ps_ticketchecklist '
+        . ' SET ticket_id = ? '
+        . ' WHERE ticket_id = ?';
 
-    return if !$Self->{DBObject}->Prepare(
+    return $Self->{DBObject}->Do(
         SQL  => $SQL,
         Bind => [
-            \$Param{NewObjectID},
-            \$Param{UserID},
-            \$Param{ObjectType},
-            \$Param{OldObjectID},
+            \$Param{NewTicketID},
+            \$Param{OldTicketID},
         ],
     );
-
-    return 1;
 }
 
 1;
