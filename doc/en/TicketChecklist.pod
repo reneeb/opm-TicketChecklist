@@ -45,11 +45,29 @@ have a few more features:
 
 =item * Notifications for ticket owner when a checklist item is set to a new (configurable) state
 
+=item * Notification when due date is reached
+
 =item * Overview of tickets that have open checklist items
 
-=item * change order (position) of the checklist items
+=item * Overview of checklist items ("MyChecklistItems")
+
+=item * Change order (position) of the checklist items
+
+=item * Merge of checklists when tickets are merged
 
 =back
+
+=head2 Roadmap
+
+Those features are planned for the future:
+
+=over 4
+
+=item * Create checklists from templates
+
+=back
+
+Those features will be released in the pro version first.
 
 =head1 AUTHOR AND LICENSE
 
