@@ -135,9 +135,5 @@
             "version": 0,
             "text": ""
         }
-    ],
-    "code": [
-        { "type": "Install", "version": 0 },
-        { "type": "Upgrade", "version": 0 }
     ]
 }
