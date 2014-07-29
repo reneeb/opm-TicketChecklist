@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <otrs_config version="1.0" init="Application">
-    <ConfigItem Name="Frontend::Output::FilterElementPost###OutputFilterTicketChecklist" Required="0" Valid="1">
+    <ConfigItem Name="Frontend::Output::FilterContent###OutputFilterTicketChecklist" Required="0" Valid="1">
         <Description Translatable="1">Module to show checklists in tickets.</Description>
         <Group>TicketChecklist</Group>
         <SubGroup>OutputFilter</SubGroup>
@@ -10,7 +10,7 @@
                 <Item Key="Debug">0</Item>
                 <Item Key="Templates">
                     <Hash>
-                        <Item Key="AgentITSMWorkOrderZoom">1</Item>
+                        <Item Key="AgentTicketZoom">1</Item>
                     </Hash>
                 </Item>
             </Hash>
@@ -49,7 +49,7 @@
         <Group>TicketChecklist</Group>
         <SubGroup>Checklist</SubGroup>
         <Setting>
-            <String Regex="">created</String>
+            <String Regex="">open</String>
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Frontend::Module###AgentTicketChecklist" Required="0" Valid="1">
@@ -63,6 +63,9 @@
                 <Description>Maintain ticket checklists.</Description>
                 <NavBarName>Ticket</NavBarName>
                 <Title>Maintain ticket checklists.</Title>
+                <Loader>
+                    <JavaScript>PS.TicketChecklist.js</JavaScript>
+                </Loader>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
