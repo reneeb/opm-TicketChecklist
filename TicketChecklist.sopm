@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.21) -->
     <Name>TicketChecklist</Name>
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <Framework>3.3.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -31,8 +31,8 @@
             <Column Name="id" Required="true" Type="INTEGER" AutoIncrement="true" PrimaryKey="true" />
             <Column Name="title" Required="false" Type="VARCHAR" Size="250" />
             <Column Name="position" Required="true" Type="SMALLINT" />
-            <Column Name="status_id" Required="false" Type="SMALLINT" />
-            <Column Name="ticket_id" Required="true" Type="SMALLINT" />
+            <Column Name="status_id" Required="true" Type="INTEGER" />
+            <Column Name="ticket_id" Required="true" Type="BIGINT" />
             <Column Name="create_time" Required="true" Type="DATE" />
             <Column Name="create_by" Required="true" Type="INTEGER" />
             <Column Name="change_time" Required="true" Type="DATE" />
