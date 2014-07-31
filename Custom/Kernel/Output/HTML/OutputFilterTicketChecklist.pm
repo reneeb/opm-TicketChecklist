@@ -19,7 +19,7 @@ use Kernel::System::Time;
 use Kernel::System::PerlServices::TicketChecklist;
 use Kernel::System::PerlServices::TicketChecklistStatus;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -72,6 +72,8 @@ sub Run {
     my @ChecklistItems = $Self->{ChecklistObject}->TicketChecklistTicketGet(
         TicketID => $TicketID,
     );
+
+    return 1 if !@ChecklistItems;
 
     my %StatusList   = $Self->{StatusObject}->TicketChecklistStatusList();
     my %StatusColors;
