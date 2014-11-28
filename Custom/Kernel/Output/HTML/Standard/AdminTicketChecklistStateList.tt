@@ -1,5 +1,5 @@
 # --
-# AdminTicketChecklistStateList.dtl - provides HTML form for AdminTicketChecklistStateList
+# AdminTicketChecklistStateList.tt - provides HTML form for AdminTicketChecklistStateList
 # Copyright (C) 2014 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -8,16 +8,16 @@
 # --
 
 <div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
-    <h1>$Text{"Checklist Item State Management"}</h1>
+    <h1>[% Translate("Checklist Item State Management") | html %]</h1>
     <div class="SidebarColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"Actions"}</h2>
+                <h2>[% Translate("Actions") | html %]</h2>
             </div>
             <div class="Content">
                 <ul class="ActionList">
                     <li>
-                        <a href="$Env{"Baselink"}Action=$Env{"Action"};Subaction=Add" class="CallForAction"><span>$Text{"Add State"}</span></a>
+                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %];Subaction=Add" class="CallForAction"><span>[% Translate("Add State") | html %]</span></a>
                     </li>
                 </ul>
             </div>
@@ -27,45 +27,45 @@
     <div class="ContentColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"List"}</h2>
+                <h2>[% Translate("List") | html %]</h2>
             </div>
             <div class="Content">
                 <table class="DataTable" id="ChecklistItemState">
                     <thead>
                         <tr>
-                            <th>$Text{"ID"}</th>
-                            <th>$Text{"Name"}</th>
-                            <th>$Text{"Valid"}</th>
-                            <th>$Text{"Actions"}</th>
+                            <th>[% Translate("ID") | html %]</th>
+                            <th>[% Translate("Name") | html %]</th>
+                            <th>[% Translate("Valid") | html %]</th>
+                            <th>[% Translate("Actions") | html %]</th>
                         </tr>
                     </thead>
                     <tbody>
-<!-- dtl:block:NoStateFound -->
+[% RenderBlockStart("NoStateFound") %]
                         <tr>
-                            <td colspan="4">$Text{"No matches found."}</td>
+                            <td colspan="4">[% Translate("No matches found.") | html %]</td>
                         </tr>
-<!-- dtl:block:NoStateFound -->
-<!-- dtl:block:StateRow -->
+[% RenderBlockEnd("NoStateFound") %]
+[% RenderBlockStart("StateRow") %]
                         <tr>
                             <td>
-                                $QData{"ID"}
+                                [% Data.ID | html %]
                             </td>
                             <td>
-                                $QData{"Name"}
+                                [% Data.Name | html %]
                             </td>
                             <td>
-                                $Text{"$Data{"Valid"}"}
+                                [% Translate(Data.Valid) | html %]
                             </td>
                             <td>
-                                <a href="$Env{"Baselink"}Action=AdminTicketChecklistStates;Subaction=Edit;ID=$LQData{"ID"}">
-                                $Text{"edit"}
+                                <a href="[% Env("Baselink") %]Action=AdminTicketChecklistStates;Subaction=Edit;ID=[% Data.ID | uri %]">
+                                [% Translate("edit") | html %]
                                 </a> |
-                                <a href="$Env{"Baselink"}Action=AdminTicketChecklistStates;Subaction=Delete;ID=$LQData{"ID"}">
-                                $Text{"delete"}
+                                <a href="[% Env("Baselink") %]Action=AdminTicketChecklistStates;Subaction=Delete;ID=[% Data.ID | uri %]">
+                                [% Translate("delete") | html %]
                                 </a>
                             </td>
                         </tr>
-<!-- dtl:block:StateRow -->
+[% RenderBlockEnd("StateRow") %]
                     </tbody>
                 </table>
             </div>

@@ -1,0 +1,28 @@
+# --
+# TicketChecklistWidget.tt - widget for checklist
+# Copyright (C) 2014 Perl-Services.de, http://www.perl-services.de 
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+<div class="WidgetSimple">
+    <div class="Header">
+        <h2>[% Translate("Ticket Checklist") | html %]</h2>
+    </div>
+    <div class="Content">
+        <input type="hidden" id="ChecklistTicketID" name="ChecklistTicketID" value="[% Data.TicketID | html %]" />
+        <ol>
+[% RenderBlockStart("Item") %]
+           <li style="margin: 5px">
+               <span style="background-color: [% Data.Color | html %]" id="ItemFlag_[% Data.Position | html %]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+               [% Data.Title | html %]
+               <input type="hidden" id="ItemID_[% Data.Position | html %]" value="[% Data.ID | html %]" />
+               [% Data.StatusSelect %]
+           </li>
+[% RenderBlockEnd("Item") %]
+        </ol>
+    </div>
+</div>
+

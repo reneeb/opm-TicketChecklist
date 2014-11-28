@@ -1,0 +1,58 @@
+# --
+# AgentTicketChecklist.tt - provides HTML for AgentTicketChecklist.pm
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.com/
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+<div class="LayoutPopup ARIARoleMain">
+    <div class="Header">
+        <h1>[% Translate("Manage Checklist for ticket") | html %]: [% Data.TicketNumber | html %] - [% Data.Title | html %]</h1>
+        <p>
+            <a class="CancelClosePopup" href="#">[% Translate("Cancel & close window") | html %]</a>
+        </p>
+    </div>
+
+    <div class="Content">
+        <div class="LayoutFixedSidebar SidebarLast">
+            <div class="ContentColumn">
+                <div class="Content">
+                    <form action="[% Env("CGIHandle") %]" id="MainForm" method="post" name="compose" class="Validate">
+                        <input type="hidden" name="Action" value="[% Env("Action") %]"/>
+                        <input type="hidden" name="Subaction" value="Save"/>
+                        <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]" id="TicketID"/>
+<script type="text/javascript">
+//<![CDATA[
+    var Positions = '[% Data.Position | html %]';
+//]]>
+</script>
+<ol id="ChecklistItems">
+
+[% RenderBlockStart("Item") %]
+                       <li id="Item_[% Data.Position | html %]"> <input type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
+                        [% Data.StatusSelect %]
+                        <input type="hidden" name="ItemID_[% Data.Position | html %]" id="ItemID_[% Data.Position | html %]" value="[% Data.ID | html %]" />
+                        <button name="DelBtn" id="DelBtn_[% Data.Position | html %]" class="DelBtn" value="-">-</button>
+                       </li>
+[% RenderBlockEnd("Item") %]
+</ol>
+
+                            <div class="Field">
+                                <button class="CallForAction Primary" id="AddBtn" accesskey="g" title="[% Translate("+") | html %] (g)" type="submit" value="[% Translate("+") | html %]"><span>[% Translate("+") | html %]</span></button>
+
+                                <button class="CallForAction Primary" id="Submit" accesskey="g" title="[% Translate("Submit") | html %] (g)" type="submit" value="[% Translate("Submit") | html %]"><span>[% Translate("Submit") | html %]</span></button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="Clear"></div>
+        </div>
+
+        <div id="ChecklistTickets"></div>
+
+    </div>
+    <div class="Footer"></div>
+</div>

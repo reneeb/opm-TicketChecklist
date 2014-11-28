@@ -26,7 +26,7 @@
                 <Item Key="Name">Checklist</Item>
                 <Item Key="Description" Translatable="1">Maintain checklist for the ticket</Item>
                 <Item Key="Action">AgentTicketChecklist</Item>
-                <Item Key="Link">Action=AgentTicketChecklist;TicketID=$QData{"TicketID"}</Item>
+                <Item Key="Link">Action=AgentTicketChecklist;TicketID=[% Data.TicketID | html %]</Item>
                 <Item Key="LinkParam"></Item>
                 <Item Key="Target"></Item>
                 <Item Key="PopupType">TicketAction</Item>
