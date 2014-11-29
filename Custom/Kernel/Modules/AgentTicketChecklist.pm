@@ -38,7 +38,7 @@ sub Run {
 
     my $LayoutObject    = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $TicketObject    = $Kernel::OM->Get('Kernel::System::Ticket');
-    my $ParamObject     = $Kernel::OM->Get('Kernel::System::WebRequest');
+    my $ParamObject     = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
     my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
     my $StatusObject    = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
@@ -268,7 +268,7 @@ sub Form {
     my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
     my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
-    my $ParamObject  = $Kernel::OM->Get('Kernel::System::WebRequest');
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
 
     my %StatusList = $StatusObject->TicketChecklistStatusList();
 
