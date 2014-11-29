@@ -12,8 +12,10 @@ package Kernel::System::PerlServices::TicketChecklistStatus;
 use strict;
 use warnings;
 
-use Kernel::System::User;
-use Kernel::System::Valid;
+our @ObjectDependencies = qw(
+    Kernel::System::User
+    Kernel::System::Valid
+);
 
 =head1 NAME
 
@@ -29,40 +31,6 @@ Kernel::System::PerlServices::TicketChecklistStatus - ...
 
 create an object
 
-    use Kernel::Config;
-    use Kernel::System::Encode;
-    use Kernel::System::Log;
-    use Kernel::System::Main;
-    use Kernel::System::DB;
-    use Kernel::System::PerlServices::TicketChecklistStatus;
-
-    my $ConfigObject = Kernel::Config->new();
-    my $EncodeObject = Kernel::System::Encode->new(
-        ConfigObject => $ConfigObject,
-    );
-    my $LogObject = Kernel::System::Log->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-    );
-    my $MainObject = Kernel::System::Main->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-    );
-    my $DBObject = Kernel::System::DB->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-        MainObject   => $MainObject,
-    );
-    my $TicketChecklistStatusObject = Kernel::System::PerlServices::TicketChecklistStatus->new(
-        ConfigObject => $ConfigObject,
-        LogObject    => $LogObject,
-        DBObject     => $DBObject,
-        MainObject   => $MainObject,
-        EncodeObject => $EncodeObject,
-    );
-
 =cut
 
 sub new {
@@ -71,15 +39,6 @@ sub new {
     # allocate new hash for object
     my $Self = {};
     bless( $Self, $Type );
-
-    # check needed objects
-    for my $Object (qw(DBObject ConfigObject MainObject LogObject EncodeObject TimeObject)) {
-        $Self->{$Object} = $Param{$Object} || die "Got no $Object!";
-    }
-
-    # create needed objects
-    $Self->{UserObject}  = Kernel::System::User->new( %{$Self} );
-    $Self->{ValidObject} = Kernel::System::Valid->new( %{$Self} );
 
     return $Self;
 }
@@ -100,10 +59,13 @@ Add status
 sub TicketChecklistStatusAdd {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     for my $Needed (qw(Name Color ValidID UserID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -116,7 +78,7 @@ sub TicketChecklistStatusAdd {
     );
 
     if ( $CheckID ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => "State name alread in use",
         );
@@ -125,7 +87,7 @@ sub TicketChecklistStatusAdd {
     }
 
     # insert state
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_ticketchecklist_status '
             . '(name, color, valid_id, create_time, create_by, change_time, change_by) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, current_timestamp, ?)',
@@ -143,7 +105,7 @@ sub TicketChecklistStatusAdd {
     );
 
     # log notice
-    $Self->{LogObject}->Log(
+    $LogObject->Log(
         Priority => 'notice',
         Message  => "TicketChecklistStatus '$ID' created successfully ($Param{UserID})!",
     );
@@ -170,10 +132,13 @@ to update state
 sub TicketChecklistStatusUpdate {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     for my $Needed (qw(ID Name Color ValidID UserID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -186,14 +151,14 @@ sub TicketChecklistStatusUpdate {
     );
 
     if ( $CheckID && $CheckID != $Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => "State name alread in use",
         );
     }
 
     # update state
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'UPDATE ps_ticketchecklist_status SET '
             . ' name = ?, color = ?, valid_id = ?, change_time = current_timestamp, change_by = ? '
             . ' WHERE id = ?',
@@ -233,9 +198,14 @@ This returns something like:
 sub TicketChecklistStatusGet {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject   = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
+    my $ValidObject = $Kernel::OM->Get('Kernel::System::Valid');
+    my $UserObject  = $Kernel::OM->Get('Kernel::System::User');
+
     # check needed stuff
     if ( !$Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need ID!',
         );
@@ -243,7 +213,7 @@ sub TicketChecklistStatusGet {
     }
 
     # sql
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL => 'SELECT id, name, color, valid_id, create_by, create_time, change_by, change_time '
             . 'FROM ps_ticketchecklist_status WHERE id = ?',
         Bind  => [ \$Param{ID} ],
@@ -251,7 +221,7 @@ sub TicketChecklistStatusGet {
     );
 
     my %TicketChecklistStatus;
-    while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Data = $DBObject->FetchrowArray() ) {
         %TicketChecklistStatus = (
             ID         => $Data[0],
             Name       => $Data[1],
@@ -264,8 +234,8 @@ sub TicketChecklistStatusGet {
         );
     }
 
-    $TicketChecklistStatus{Valid}   = $Self->{ValidObject}->ValidLookup( ValidID => $TicketChecklistStatus{ValidID} );
-    $TicketChecklistStatus{Creator} = $Self->{UserObject}->UserLookup( UserID => $TicketChecklistStatus{CreateBy} );
+    $TicketChecklistStatus{Valid}   = $ValidObject->ValidLookup( ValidID => $TicketChecklistStatus{ValidID} );
+    $TicketChecklistStatus{Creator} = $UserObject->UserLookup( UserID => $TicketChecklistStatus{CreateBy} );
 
     return %TicketChecklistStatus;
 }
@@ -283,16 +253,19 @@ deletes a status entry. Returns 1 if it was successful, undef otherwise.
 sub TicketChecklistStatusDelete {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     if ( !$Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need ID!',
         );
         return;
     }
 
-    return $Self->{DBObject}->Do(
+    return $DBObject->Do(
         SQL  => 'DELETE FROM ps_ticketchecklist_status WHERE id = ?',
         Bind => [ \$Param{ID} ],
     );
@@ -305,14 +278,17 @@ sub TicketChecklistStatusDelete {
 sub TicketChecklistStatusList {
     my ($Self, %Param) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     my $SQL = 'SELECT id, name FROM ps_ticketchecklist_status';
 
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL => $SQL,
     );
 
     my %StatusList;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         $StatusList{ $Row[0] } = $Row[1];
     }
 
@@ -336,9 +312,12 @@ or
 sub TicketChecklistStatusLookup {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     if ( !$Param{ID} && !$Param{Name}) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need either ID or Name!',
         );
@@ -353,14 +332,14 @@ sub TicketChecklistStatusLookup {
         $Bind = [ \$Param{ID} ];
     }
 
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL   => $SQL,
         Bind  => $Bind,
         Limit => 1,
     );
 
     my $Value;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         $Value = $Row[0];
     }
 
