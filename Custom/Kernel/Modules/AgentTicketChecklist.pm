@@ -12,8 +12,13 @@ package Kernel::Modules::AgentTicketChecklist;
 use strict;
 use warnings;
 
-use Kernel::System::PerlServices::TicketChecklist;
-use Kernel::System::PerlServices::TicketChecklistStatus;
+our @ObjectDependencies = qw(
+    Kernel::Output::HTML::Layout
+    Kernel::System::Ticket
+    Kernel::System::PerlServices::TicketChecklist
+    Kernel::System::PerlServices::TicketChecklistStatus
+);
+
 use Kernel::System::VariableCheck qw(:all);
 
 sub new {
@@ -23,16 +28,6 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check needed Objects
-    for my $Needed (qw(ParamObject DBObject TicketObject LayoutObject LogObject ConfigObject)) {
-        if ( !$Self->{$Needed} ) {
-            $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
-        }
-    }
-
-    $Self->{ChecklistObject} = Kernel::System::PerlServices::TicketChecklist->new(%Param);
-    $Self->{StatusObject}    = Kernel::System::PerlServices::TicketChecklistStatus->new(%Param);
-
     $Self->{Config}->{Permission} = 'rw';
 
     return $Self;
@@ -40,6 +35,13 @@ sub new {
 
 sub Run {
     my ( $Self, %Param ) = @_;
+
+    my $LayoutObject    = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $TicketObject    = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $ParamObject     = $Kernel::OM->Get('Kernel::System::WebRequest');
+    my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
+    my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
+    my $StatusObject    = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
 
     my $Output;
 
@@ -49,7 +51,7 @@ sub Run {
         if ( !$Self->{TicketID} ) {
     
             # error page
-            return $Self->{LayoutObject}->ErrorScreen(
+            return $LayoutObject->ErrorScreen(
                 Message => 'No TicketID is given!',
                 Comment => 'Please contact the admin.',
             );
@@ -57,7 +59,7 @@ sub Run {
     
         # check permissions
         if (
-            !$Self->{TicketObject}->TicketPermission(
+            !$TicketObject->TicketPermission(
                 Type     => $Self->{Config}->{Permission},
                 TicketID => $Self->{TicketID},
                 UserID   => $Self->{UserID}
@@ -66,28 +68,28 @@ sub Run {
         {
     
             # error screen, don't show ticket
-            return $Self->{LayoutObject}->NoPermission(
+            return $LayoutObject->NoPermission(
                 Message    => "You need $Self->{Config}->{Permission} permissions!",
                 WithHeader => 'yes',
             );
         }
     
         # get ACL restrictions
-        $Self->{TicketObject}->TicketAcl(
+        $TicketObject->TicketAcl(
             Data          => '-',
             TicketID      => $Self->{TicketID},
             ReturnType    => 'Action',
             ReturnSubType => '-',
             UserID        => $Self->{UserID},
         );
-        my %AclAction = $Self->{TicketObject}->TicketAclActionData();
+        my %AclAction = $TicketObject->TicketAclActionData();
     
         # check if ACL restrictions exist
         if ( IsHashRefWithData( \%AclAction ) ) {
     
             # show error screen if ACL prohibits this action
             if ( defined $AclAction{ $Self->{Action} } && $AclAction{ $Self->{Action} } eq '0' ) {
-                return $Self->{LayoutObject}->NoPermission( WithHeader => 'yes' );
+                return $LayoutObject->NoPermission( WithHeader => 'yes' );
             }
         }
     }
@@ -95,7 +97,7 @@ sub Run {
     if ( $Self->{Subaction} eq 'Save' ) {
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
 
         my %Error;
 
@@ -105,14 +107,14 @@ sub Run {
         }
         grep{
             $_ =~ m{\A ItemTitle_ [0-9]+ \z}xms;
-        } $Self->{ParamObject}->GetParamNames();
+        } $ParamObject->GetParamNames();
 
         my @ChecklistItems;
 
         for my $Pos ( @Positions ) {
-            my $Title = $Self->{ParamObject}->GetParam( Param => 'ItemTitle_' . $Pos );
-            my $State = $Self->{ParamObject}->GetParam( Param => 'ItemStatus_' . $Pos );
-            my $ID    = $Self->{ParamObject}->GetParam( Param => 'ItemID_' . $Pos );
+            my $Title = $ParamObject->GetParam( Param => 'ItemTitle_' . $Pos );
+            my $State = $ParamObject->GetParam( Param => 'ItemStatus_' . $Pos );
+            my $ID    = $ParamObject->GetParam( Param => 'ItemID_' . $Pos );
 
             push @ChecklistItems, +{
                 StateID  => $State,
@@ -145,9 +147,9 @@ sub Run {
 
         POS:
         for my $Pos ( sort { $a <=> $b }@Positions ) {
-            my $Title = $Self->{ParamObject}->GetParam( Param => 'ItemTitle_' . $Pos );
-            my $State = $Self->{ParamObject}->GetParam( Param => 'ItemStatus_' . $Pos );
-            my $ID    = $Self->{ParamObject}->GetParam( Param => 'ItemID_' . $Pos );
+            my $Title = $ParamObject->GetParam( Param => 'ItemTitle_' . $Pos );
+            my $State = $ParamObject->GetParam( Param => 'ItemStatus_' . $Pos );
+            my $ID    = $ParamObject->GetParam( Param => 'ItemID_' . $Pos );
 
             next POS if !$Title;
 
@@ -158,7 +160,7 @@ sub Run {
                 $Opts{ID} = $ID;
             }
 
-            $Self->{ChecklistObject}->$Method(
+            $ChecklistObject->$Method(
                 %Opts,
                 Title    => $Title,
                 StatusID => $State,
@@ -169,18 +171,18 @@ sub Run {
         }
 
         # redirect
-        return $Self->{LayoutObject}->PopupClose(
+        return $LayoutObject->PopupClose(
             URL => "Action=AgentTicketZoom;TicketID=$Self->{TicketID}",
         );
     }
 
     # new item
     elsif ( $Self->{Subaction} eq 'NewItem' ) {
-        my $Position     = $Self->{ParamObject}->GetParam( Param => 'Position' );
-        my %StatusList   = $Self->{StatusObject}->TicketChecklistStatusList();
-        my $DefaultValue = $Self->{ConfigObject}->Get( 'TicketChecklist::DefaultState' ) || 'open';
+        my $Position     = $ParamObject->GetParam( Param => 'Position' );
+        my %StatusList   = $StatusObject->TicketChecklistStatusList();
+        my $DefaultValue = $ConfigObject->Get( 'TicketChecklist::DefaultState' ) || 'open';
 
-        my $StatusDropDown = $Self->{LayoutObject}->BuildSelectionJSON([
+        my $StatusDropDown = $LayoutObject->BuildSelectionJSON([
             {
                 Name          => 'ItemStatus_' . ++$Position,
                 Data          => \%StatusList,
@@ -191,8 +193,8 @@ sub Run {
 
         my $JSON = sprintf '{ "Status":%s, "Position":%s }', $StatusDropDown, $Position;
 
-        return $Self->{LayoutObject}->Attachment(
-            ContentType => 'application/json; charset=' . $Self->{LayoutObject}->{Charset},
+        return $LayoutObject->Attachment(
+            ContentType => 'application/json; charset=' . $LayoutObject->{Charset},
             Content     => $JSON,
             Type        => 'inline',
             NoCache     => 1,
@@ -201,14 +203,14 @@ sub Run {
 
     # delete item
     elsif ( $Self->{Subaction} eq 'Delete' ) {
-        my $ID = $Self->{ParamObject}->GetParam( Param => 'ID' );
+        my $ID = $ParamObject->GetParam( Param => 'ID' );
 
-        $Self->{ChecklistObject}->TicketChecklistDelete(
+        $ChecklistObject->TicketChecklistDelete(
             ID => $ID,
         );
 
-        return $Self->{LayoutObject}->Attachment(
-            ContentType => 'application/json; charset=' . $Self->{LayoutObject}->{Charset},
+        return $LayoutObject->Attachment(
+            ContentType => 'application/json; charset=' . $LayoutObject->{Charset},
             Content     => '{"Success":1}',
             Type        => 'inline',
             NoCache     => 1,
@@ -217,30 +219,30 @@ sub Run {
 
     # set new status
     elsif ( $Self->{Subaction} eq 'UpdateItemStatus' ) {
-        my $ID = $Self->{ParamObject}->GetParam( Param => 'ID' );
+        my $ID = $ParamObject->GetParam( Param => 'ID' );
 
-        my %Item = $Self->{ChecklistObject}->TicketChecklistGet(
+        my %Item = $ChecklistObject->TicketChecklistGet(
             ID => $ID,
         );
 
         delete $Item{Status};
-        $Item{StatusID} = $Self->{ParamObject}->GetParam( Param => 'StatusID' );
+        $Item{StatusID} = $ParamObject->GetParam( Param => 'StatusID' );
 
-        my %Status = $Self->{StatusObject}->TicketChecklistStatusGet( ID => $Item{StatusID} );
+        my %Status = $StatusObject->TicketChecklistStatusGet( ID => $Item{StatusID} );
 
-        $Self->{ChecklistObject}->TicketChecklistUpdate(
+        $ChecklistObject->TicketChecklistUpdate(
             %Item,
             UserID => $Self->{UserID},
         );
 
-        my $Pos  = $Self->{ParamObject}->GetParam( Param => 'ItemPosition' );
+        my $Pos  = $ParamObject->GetParam( Param => 'ItemPosition' );
         my $JSON = sprintf '{"Position":"%s", "Color":"%s"}',
             $Pos,
             $Status{Color},
         ;
 
-        return $Self->{LayoutObject}->Attachment(
-            ContentType => 'application/json; charset=' . $Self->{LayoutObject}->{Charset},
+        return $LayoutObject->Attachment(
+            ContentType => 'application/json; charset=' . $LayoutObject->{Charset},
             Content     => $JSON,
             Type        => 'inline',
             NoCache     => 1,
@@ -249,7 +251,7 @@ sub Run {
 
     # show form
     else {
-        my @ChecklistItems = $Self->{ChecklistObject}->TicketChecklistTicketGet(
+        my @ChecklistItems = $ChecklistObject->TicketChecklistTicketGet(
             TicketID => $Self->{TicketID},
         );
 
@@ -263,19 +265,24 @@ sub Run {
 sub Form {
     my ( $Self, %Param ) = @_;
 
-    my %StatusList = $Self->{StatusObject}->TicketChecklistStatusList();
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+    my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::WebRequest');
+
+    my %StatusList = $StatusObject->TicketChecklistStatusList();
 
     my $Counter = 1;
     for my $Item ( @{ $Param{Items} || [] } ) {
         $Item->{Position}     = $Counter++;
-        $Item->{StatusSelect} = $Self->{LayoutObject}->BuildSelection(
+        $Item->{StatusSelect} = $LayoutObject->BuildSelection(
             Name        => 'ItemStatus_' . $Item->{Position},
             Data        => \%StatusList,
             SelectedID  => $Item->{StatusID},
             Translation => 1,
         );
 
-        $Self->{LayoutObject}->Block(
+        $LayoutObject->Block(
             Name => 'Item',
             Data => $Item,
         );
@@ -284,16 +291,16 @@ sub Form {
     my $Output;
 
     # print header
-    $Output .= $Self->{LayoutObject}->Header(
+    $Output .= $LayoutObject->Header(
         Type => 'Small',
     );
 
-    my %Ticket = $Self->{TicketObject}->TicketGet(
+    my %Ticket = $TicketObject->TicketGet(
         TicketID => $Self->{TicketID},
         UserID   => $Self->{UserID},
     );
 
-    $Output .= $Self->{LayoutObject}->Output(
+    $Output .= $LayoutObject->Output(
         TemplateFile => 'AgentTicketChecklist',
         Data         => {
             %Ticket,
@@ -302,7 +309,7 @@ sub Form {
         },
     );
 
-    $Output .= $Self->{LayoutObject}->Footer(
+    $Output .= $LayoutObject->Footer(
         Type => 'Small',
     );
 
