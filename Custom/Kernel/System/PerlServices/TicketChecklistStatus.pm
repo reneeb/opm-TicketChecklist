@@ -15,6 +15,8 @@ use warnings;
 our @ObjectDependencies = qw(
     Kernel::System::User
     Kernel::System::Valid
+    Kernel::System::Log
+    Kernel::System::DB
 );
 
 =head1 NAME
