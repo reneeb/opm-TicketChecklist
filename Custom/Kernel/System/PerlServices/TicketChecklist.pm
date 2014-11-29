@@ -12,8 +12,13 @@ package Kernel::System::PerlServices::TicketChecklist;
 use strict;
 use warnings;
 
-use Kernel::System::User;
-use Kernel::System::PerlServices::TicketChecklistStatus;
+our @ObjectDependencies = qw(
+    Kernel::System::Log
+    Kernel::System::DB
+    Kernel::System::User
+    Kernel::System::Valid
+    Kernel::System::PerlServices::TicketChecklistStatus
+);
 
 =head1 NAME
 
@@ -29,40 +34,6 @@ Kernel::System::PerlServices::TicketChecklist - backend for ticket checklists
 
 create an object
 
-    use Kernel::Config;
-    use Kernel::System::Encode;
-    use Kernel::System::Log;
-    use Kernel::System::Main;
-    use Kernel::System::DB;
-    use Kernel::System::PerlServices::TicketChecklist;
-
-    my $ConfigObject = Kernel::Config->new();
-    my $EncodeObject = Kernel::System::Encode->new(
-        ConfigObject => $ConfigObject,
-    );
-    my $LogObject = Kernel::System::Log->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-    );
-    my $MainObject = Kernel::System::Main->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-    );
-    my $DBObject = Kernel::System::DB->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-        MainObject   => $MainObject,
-    );
-    my $TicketChecklistObject = Kernel::System::PerlServices::TicketChecklist->new(
-        ConfigObject => $ConfigObject,
-        LogObject    => $LogObject,
-        DBObject     => $DBObject,
-        MainObject   => $MainObject,
-        EncodeObject => $EncodeObject,
-    );
-
 =cut
 
 sub new {
@@ -71,16 +42,6 @@ sub new {
     # allocate new hash for object
     my $Self = {};
     bless( $Self, $Type );
-
-    # check needed objects
-    for my $Object (qw(DBObject ConfigObject MainObject LogObject EncodeObject TimeObject)) {
-        $Self->{$Object} = $Param{$Object} || die "Got no $Object!";
-    }
-
-    # create needed objects
-    $Self->{UserObject}   = Kernel::System::User->new( %{$Self} );
-    $Self->{ValidObject}  = Kernel::System::Valid->new( %{$Self} );
-    $Self->{StatusObject} = Kernel::System::PerlServices::TicketChecklistStatus->new( %{$Self} );
 
     return $Self;
 }
@@ -101,10 +62,15 @@ Add time tracking
 sub TicketChecklistAdd {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject    = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject     = $Kernel::OM->Get('Kernel::System::DB');
+    my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+
+
     # check needed stuff
     for my $Needed ( qw(TicketID Title UserID Position) ) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -113,7 +79,7 @@ sub TicketChecklistAdd {
     }
 
     if ( !$Param{Status} && !$Param{StatusID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need either Status or StatusID',
         );
@@ -122,12 +88,12 @@ sub TicketChecklistAdd {
     }
 
     if ( $Param{Status} ) {
-        $Param{StatusID} = $Self->{StatusObject}->TicketChecklistStatusLookup( Name => $Param{Status} );
+        $Param{StatusID} = $StatusObject->TicketChecklistStatusLookup( Name => $Param{Status} );
     }
 
-    my $Status = $Self->{StatusObject}->TicketChecklistStatusLookup( ID => $Param{StatusID} );
+    my $Status = $StatusObject->TicketChecklistStatusLookup( ID => $Param{StatusID} );
     if ( !defined $Status ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Cannot find Status for ID ' . $Param{StatusID},
         );
@@ -136,7 +102,7 @@ sub TicketChecklistAdd {
     }
 
     # insert new item
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_ticketchecklist '
             . '(title, position, status_id, ticket_id, '
             . ' create_time, create_by, change_time, change_by) '
@@ -152,19 +118,19 @@ sub TicketChecklistAdd {
     );
 
     # get new item id
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL   => 'SELECT MAX(id) FROM ps_ticketchecklist WHERE position = ? AND ticket_id = ?',
         Bind  => [ \$Param{Position}, \$Param{TicketID} ],
         Limit => 1,
     );
 
     my $ID;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         $ID = $Row[0];
     }
 
     # log notice
-    $Self->{LogObject}->Log(
+    $LogObject->Log(
         Priority => 'notice',
         Message  => "TicketChecklist item '$ID' created successfully ($Param{UserID})!",
     );
@@ -189,10 +155,14 @@ to update news
 sub TicketChecklistUpdate {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject    = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject     = $Kernel::OM->Get('Kernel::System::DB');
+    my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+
     # check needed stuff
     for my $Needed (qw(ID TicketID Title UserID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -201,7 +171,7 @@ sub TicketChecklistUpdate {
     }
 
     if ( !$Param{Status} && !$Param{StatusID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need either Status or StatusID',
         );
@@ -210,11 +180,11 @@ sub TicketChecklistUpdate {
     }
 
     if ( $Param{Status} ) {
-        $Param{StatusID} = $Self->{StatusObject}->TicketChecklistStatusLookup( Name => $Param{Status} );
+        $Param{StatusID} = $StatusObject->TicketChecklistStatusLookup( Name => $Param{Status} );
     }
 
     # insert new news
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'UPDATE ps_ticketchecklist SET '
             . ' title = ?, position = ?, status_id = ?, ticket_id = ?, '
             . ' change_time = current_timestamp, change_by = ? '
@@ -256,9 +226,13 @@ This returns something like:
 sub TicketChecklistGet {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject  = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject   = $Kernel::OM->Get('Kernel::System::DB');
+    my $UserObject = $Kernel::OM->Get('Kernel::System::User');
+
     # check needed stuff
     if ( !$Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need ID!',
         );
@@ -266,7 +240,7 @@ sub TicketChecklistGet {
     }
 
     # sql
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL => 'SELECT id, title, status_id, position, ticket_id, '
             . 'create_by, create_time, change_by, change_time '
             . 'FROM ps_ticketchecklist WHERE id = ?',
@@ -275,7 +249,7 @@ sub TicketChecklistGet {
     );
 
     my %TicketChecklist;
-    while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Data = $DBObject->FetchrowArray() ) {
         %TicketChecklist = (
             ID         => $Data[0],
             Title      => $Data[1],
@@ -289,7 +263,7 @@ sub TicketChecklistGet {
         );
     }
 
-    $TicketChecklist{Creator} = $Self->{UserObject}->UserLookup( UserID => $TicketChecklist{CreateBy} );
+    $TicketChecklist{Creator} = $UserObject->UserLookup( UserID => $TicketChecklist{CreateBy} );
 
     return %TicketChecklist;
 }
@@ -307,9 +281,12 @@ deletes a news entry. Returns 1 if it was successful, undef otherwise.
 sub TicketChecklistDelete {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     if ( !$Param{ID} && !$Param{TicketID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need either ID or TicketID!',
         );
@@ -324,7 +301,7 @@ sub TicketChecklistDelete {
         $Bind = \$Param{TicketID};
     }
 
-    return $Self->{DBObject}->Do(
+    return $DBObject->Do(
         SQL  => $SQL,
         Bind => [ $Bind ],
     );
@@ -337,9 +314,12 @@ sub TicketChecklistDelete {
 sub TicketChecklistTicketGet {
     my ($Self,%Param) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     for my $Needed ( qw(TicketID) ) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -353,7 +333,7 @@ sub TicketChecklistTicketGet {
         . ' WHERE ticket_id = ? '
         . ' ORDER BY position ASC';
 
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL  => $SQL,
         Bind => [
             \$Param{TicketID},
@@ -361,7 +341,7 @@ sub TicketChecklistTicketGet {
     );
 
     my @ChecklistItems;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         push @ChecklistItems, {
             ID       => $Row[0],
             Title    => $Row[1],
@@ -381,9 +361,12 @@ sub TicketChecklistTicketGet {
 sub TicketChecklistMerge {
     my ($Self, %Param) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     for my $Needed (qw(NewTicketID OldTicketID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -396,7 +379,7 @@ sub TicketChecklistMerge {
         . ' SET ticket_id = ? '
         . ' WHERE ticket_id = ?';
 
-    return $Self->{DBObject}->Do(
+    return $DBObject->Do(
         SQL  => $SQL,
         Bind => [
             \$Param{NewTicketID},
