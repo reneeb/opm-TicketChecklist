@@ -13,8 +13,10 @@ use strict;
 use warnings;
 
 our @ObjectDependencies = qw(
+    Kernel::Config
     Kernel::Output::HTML::Layout
     Kernel::System::Ticket
+    Kernel::System::Web::Request
     Kernel::System::PerlServices::TicketChecklist
     Kernel::System::PerlServices::TicketChecklistStatus
 );
