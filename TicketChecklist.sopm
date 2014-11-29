@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.21) -->
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.25) -->
     <Name>TicketChecklist</Name>
-    <Version>0.3.2</Version>
-    <Framework>3.3.x</Framework>
+    <Version>0.4.1</Version>
+    <Framework>4.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Eine Checkliste für Tickets</Description>
@@ -13,10 +13,10 @@
         <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
         <File Permission="644" Location="Custom/Kernel/Modules/AgentTicketChecklist.pm" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/OutputFilterTicketChecklist.pm" />
-        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateForm.dtl" />
-        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateList.dtl" />
-        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AgentTicketChecklist.dtl" />
-        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/TicketChecklistWidget.dtl" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateForm.tt" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AdminTicketChecklistStateList.tt" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/AgentTicketChecklist.tt" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Standard/TicketChecklistWidget.tt" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklist.pm" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistStatus.pm" />
         <File Permission="644" Location="Kernel/Config/Files/TicketChecklist.xml" />
@@ -25,6 +25,8 @@
         <File Permission="644" Location="doc/en/TicketChecklist.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/PS.TicketChecklist.js" />
         <File Permission="644" Location="var/httpd/htdocs/js/PS.TicketChecklistWidget.js" />
+        <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/img/ps/arrow_down.png" />
+        <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/img/ps/arrow_up.png" />
     </Filelist>
     <DatabaseInstall Type="post">
         <TableCreate Name="ps_ticketchecklist">
