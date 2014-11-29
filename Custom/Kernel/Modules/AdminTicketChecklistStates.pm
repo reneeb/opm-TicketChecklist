@@ -12,10 +12,12 @@ package Kernel::Modules::AdminTicketChecklistStates;
 use strict;
 use warnings;
 
-use Kernel::System::PerlServices::TicketChecklistStatus;
-use Kernel::System::Valid;
+our @ObjectDependencies = qw(
+    Kernel::System::PerlServices::TicketChecklistStatus
+    Kernel::System::Valid
+);
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -24,28 +26,21 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check all needed objects
-    my @Objects = qw( ParamObject DBObject LayoutObject ConfigObject LogObject );
-    for my $Needed (@Objects) {
-        if ( !$Self->{$Needed} ) {
-            $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
-        }
-    }
-
-    # create needed objects
-    $Self->{StateObject} = Kernel::System::PerlServices::TicketChecklistStatus->new(%Param);
-    $Self->{ValidObject} = Kernel::System::Valid->new(%Param);
-
     return $Self;
 }
 
 sub Run {
     my ( $Self, %Param ) = @_;
 
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $ValidObject  = $Kernel::OM->Get('Kernel::System::Valid');
+    my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+
     my @Params = qw(ID Name ValidID Color);
     my %GetParam;
     for my $Param (@Params) {
-        $GetParam{$Param} = $Self->{ParamObject}->GetParam( Param => $Param ) || '';
+        $GetParam{$Param} = $ParamObject->GetParam( Param => $Param ) || '';
     }
 
     # ------------------------------------------------------------ #
@@ -57,14 +52,14 @@ sub Run {
             Add  => 'Save',
         );
 
-        my $Output = $Self->{LayoutObject}->Header();
-        $Output .= $Self->{LayoutObject}->NavigationBar();
+        my $Output = $LayoutObject->Header();
+        $Output .= $LayoutObject->NavigationBar();
         $Output .= $Self->_MaskForm(
             %GetParam,
             %Param,
             Subaction => $Subaction{ $Self->{Subaction} },
         );
-        $Output .= $Self->{LayoutObject}->Footer();
+        $Output .= $LayoutObject->Footer();
         return $Output;
     }
 
@@ -74,13 +69,13 @@ sub Run {
     elsif ( $Self->{Subaction} eq 'Update' ) {
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
  
         # server side validation
         my %Errors;
         if (
             !$GetParam{ValidID} ||
-            !$Self->{ValidObject}->ValidLookup( ValidID => $GetParam{ValidID} )
+            !$ValidObject->ValidLookup( ValidID => $GetParam{ValidID} )
             )
         {
             $Errors{ValidIDInvalid} = 'ServerError';
@@ -95,29 +90,29 @@ sub Run {
         if ( %Errors ) {
             $Self->{Subaction} = 'Edit';
 
-            my $Output = $Self->{LayoutObject}->Header();
-            $Output .= $Self->{LayoutObject}->NavigationBar();
+            my $Output = $LayoutObject->Header();
+            $Output .= $LayoutObject->NavigationBar();
             $Output .= $Self->_MaskForm(
                 %GetParam,
                 %Param,
                 %Errors,
                 Subaction => 'Update',
             );
-            $Output .= $Self->{LayoutObject}->Footer();
+            $Output .= $LayoutObject->Footer();
 
             return $Output;
         }
 
-        my $Update = $Self->{StateObject}->TicketChecklistStatusUpdate(
+        my $Update = $StatusObject->TicketChecklistStatusUpdate(
             %GetParam,
             UserID  => $Self->{UserID},
         );
 
         if ( !$Update ) {
-            return $Self->{LayoutObject}->ErrorScreen();
+            return $LayoutObject->ErrorScreen();
         }
 
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminTicketChecklistStates" );
+        return $LayoutObject->Redirect( OP => "Action=AdminTicketChecklistStates" );
     }
 
     # ------------------------------------------------------------ #
@@ -126,13 +121,13 @@ sub Run {
     elsif ( $Self->{Subaction} eq 'Save' ) {
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
 
         # server side validation
         my %Errors;
         if (
             !$GetParam{ValidID} ||
-            !$Self->{ValidObject}->ValidLookup( ValidID => $GetParam{ValidID} )
+            !$ValidObject->ValidLookup( ValidID => $GetParam{ValidID} )
             )
         {
             $Errors{ValidIDInvalid} = 'ServerError';
@@ -147,45 +142,45 @@ sub Run {
         if ( %Errors ) {
             $Self->{Subaction} = 'Add';
 
-            my $Output = $Self->{LayoutObject}->Header();
-            $Output .= $Self->{LayoutObject}->NavigationBar();
+            my $Output = $LayoutObject->Header();
+            $Output .= $LayoutObject->NavigationBar();
             $Output .= $Self->_MaskForm(
                 %GetParam,
                 %Param,
                 %Errors,
                 Subaction => 'Save',
             );
-            $Output .= $Self->{LayoutObject}->Footer();
+            $Output .= $LayoutObject->Footer();
             return $Output;
         }
 
-        my $Success = $Self->{StateObject}->TicketChecklistStatusAdd(
+        my $Success = $StatusObject->TicketChecklistStatusAdd(
             %GetParam,
             UserID  => $Self->{UserID},
             OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Success ) {
-            return $Self->{LayoutObject}->ErrorScreen();
+            return $LayoutObject->ErrorScreen();
         }
 
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminTicketChecklistStates" );
+        return $LayoutObject->Redirect( OP => "Action=AdminTicketChecklistStates" );
     }
 
     elsif ( $Self->{Subaction} eq 'Delete' ) {
-        $Self->{StateObject}->TicketChecklistStatusDelete( %GetParam );
+        $StatusObject->TicketChecklistStatusDelete( %GetParam );
 
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminTicketChecklistStates" );
+        return $LayoutObject->Redirect( OP => "Action=AdminTicketChecklistStates" );
     }
 
     # ------------------------------------------------------------ #
     # else ! print form
     # ------------------------------------------------------------ #
     else {
-        my $Output = $Self->{LayoutObject}->Header();
-        $Output .= $Self->{LayoutObject}->NavigationBar();
+        my $Output = $LayoutObject->Header();
+        $Output .= $LayoutObject->NavigationBar();
         $Output .= $Self->_MaskForm();
-        $Output .= $Self->{LayoutObject}->Footer();
+        $Output .= $LayoutObject->Footer();
 
         return $Output;
     }
@@ -194,17 +189,22 @@ sub Run {
 sub _MaskForm {
     my ( $Self, %Param ) = @_;
 
+    my $LayoutObject = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $ParamObject  = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $ValidObject  = $Kernel::OM->Get('Kernel::System::Valid');
+    my $StatusObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+
     if ( $Self->{Subaction} eq 'Edit' ) {
-        my %State = $Self->{StateObject}->TicketChecklistStatusGet( ID => $Param{ID} );
+        my %State = $StatusObject->TicketChecklistStatusGet( ID => $Param{ID} );
         for my $Key ( keys %State ) {
             $Param{$Key} = $State{$Key} if !$Param{$Key};
         }
     }
 
-    my $ValidID = $Self->{ValidObject}->ValidLookup( Valid => 'valid' );
+    my $ValidID = $ValidObject->ValidLookup( Valid => 'valid' );
 
-    $Param{ValidSelect} = $Self->{LayoutObject}->BuildSelection(
-        Data       => { $Self->{ValidObject}->ValidList() },
+    $Param{ValidSelect} = $LayoutObject->BuildSelection(
+        Data       => { $ValidObject->ValidList() },
         Name       => 'ValidID',
         Size       => 1,
         SelectedID => $Param{ValidID} || $ValidID,
@@ -213,20 +213,20 @@ sub _MaskForm {
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
-        my %StateList = $Self->{StateObject}->TicketChecklistStatusList();
+        my %StateList = $StatusObject->TicketChecklistStatusList();
   
         if ( !%StateList ) {
-            $Self->{LayoutObject}->Block(
+            $LayoutObject->Block(
                 Name => 'NoStateFound',
             );
         }
 
         for my $StateID ( sort { $StateList{$a} cmp $StateList{$b} } keys %StateList ) {
-            my %State = $Self->{StateObject}->TicketChecklistStatusGet(
+            my %State = $StatusObject->TicketChecklistStatusGet(
                 ID => $StateID,
             );
 
-            $Self->{LayoutObject}->Block(
+            $LayoutObject->Block(
                 Name => 'StateRow',
                 Data => \%State,
             );
@@ -239,7 +239,7 @@ sub _MaskForm {
     my $TemplateFile = 'AdminTicketChecklistStateList';
     $TemplateFile = 'AdminTicketChecklistStateForm' if $Self->{Subaction};
 
-    return $Self->{LayoutObject}->Output(
+    return $LayoutObject->Output(
         TemplateFile => $TemplateFile,
         Data         => \%Param
     );
