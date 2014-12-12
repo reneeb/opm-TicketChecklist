@@ -1,3 +1,5 @@
+=encoding utf-8
+
 =head1 NAME
 
 TicketChecklist - Have a checklist for you todos with regard to the ticket
@@ -65,9 +67,24 @@ Those features are planned for the future:
 
 =item * Create checklists from templates
 
+=item * Support drag'n'drop
+
+=item * Ticketeventmodule that allows one to automatically create checklists for tickets
+
 =back
 
-Those features will be released in the pro version first.
+Those features will be released in the pro version first. If you want to sponsor one of those
+features, please contact us at C<< <otrs@perl-services.de> >>.
+
+=head1 CHANGES
+
+=over 4
+
+=item * 0.3.3
+
+fix bug: When public.pl was called, the outputfilter does not get a dbobject, hence an error in the backend module
+
+=back
 
 =head1 AUTHOR AND LICENSE
 
