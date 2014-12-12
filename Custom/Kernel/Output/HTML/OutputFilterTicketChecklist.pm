@@ -45,10 +45,13 @@ sub new {
 
     if ( $Param{TicketObject} ) {
         $Self->{TicketObject} = $Param{TicketObject};
+        $Self->{DBObject}     = $Self->{TicketObject}->{DBObject} if !$Self->{DBObject};
     }
 
-    $Self->{ChecklistObject} = Kernel::System::PerlServices::TicketChecklist->new( %{$Self} );
-    $Self->{StatusObject}    = Kernel::System::PerlServices::TicketChecklistStatus->new( %{$Self} );
+    if ( $Self->{DBObject} ) {
+        $Self->{ChecklistObject} = Kernel::System::PerlServices::TicketChecklist->new( %{$Self} );
+        $Self->{StatusObject}    = Kernel::System::PerlServices::TicketChecklistStatus->new( %{$Self} );
+    }
 
     return $Self;
 }
