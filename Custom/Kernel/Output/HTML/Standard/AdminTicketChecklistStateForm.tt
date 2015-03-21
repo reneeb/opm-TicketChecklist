@@ -19,7 +19,8 @@
             <div class="Content">
                 <ul class="ActionList">
                     <li>
-                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %]" class="CallForAction"><span>[% Translate("Go to overview") | html %]</span></a>
+                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %]" class="CallForAction Fullsize Center">
+                        <span>[% Translate("Go to overview") | html %]</span></a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +45,7 @@
                             [% Translate("Name") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" id="Name" name="Name" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
+                            <input type="text" id="Name" name="Name" placeholder="[% Translate("done") | html %]" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
                             <div id="NameError" class="TooltipErrorMessage">
                                 <p>[% Translate("A name is required.") | html %]</p>
                             </div>
@@ -59,7 +60,7 @@
                             [% Translate("Color") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" id="Color" name="Color" value="[% Data.Color | html %]" class="W75pc Validate_Required [% Data.ColorInvalid | html %]"/>
+                            <input type="text" id="Color" name="Color" placeholder="green / #D3E5B5" value="[% Data.Color | html %]" class="W75pc Validate_Required [% Data.ColorInvalid | html %]"/>
                             <div id="ColorError" class="TooltipErrorMessage">
                                 <p>[% Translate("A color is required.") | html %]</p>
                             </div>
