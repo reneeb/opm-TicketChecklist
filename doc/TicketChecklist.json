@@ -128,12 +128,16 @@
         {
             "type": "Install", 
             "version": 0,
-            "text": ""
+            "lang": "en",
+            "title": "Thank you!",
+            "text": "Thank you for choosing the TicketChecklist module."
         },
         {
             "type": "Install", 
             "version": 0,
-            "text": ""
+            "lang": "de",
+            "title": "Vielen Dank!",
+            "text": "Vielen Dank für die Wahl des TicketChecklist Moduls."
         }
     ]
 }
