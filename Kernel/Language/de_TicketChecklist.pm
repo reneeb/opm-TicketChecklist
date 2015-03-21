@@ -23,8 +23,20 @@ sub Data {
 
     return if ref $Lang ne 'HASH';
 
-    $Lang->{'waiting'} = 'Warten';
-    $Lang->{'rejected'}  = 'Abgelehnt';
+    $Lang->{'waiting'} = 'warten';
+    $Lang->{'rejected'}  = 'abgelehnt';
+    $Lang->{'done'}  = 'erledigt';
+    $Lang->{'Add/Change States'}  = 'Status Hinzufügen / Ändern';
+    $Lang->{'Color'}  = 'Farbe';
+    $Lang->{'Checklist States'}  = 'Checklist Status';
+    $Lang->{'create and manage checklist statuses.'}  = 'Erstellen und Verwalten von Checklist Status.';
+    $Lang->{'Checklist Settings'}  = 'Checklist Einstellungen';
+    $Lang->{'Maintain checklist for the ticket'}  = 'Verwalten Sie eine Checkliste für das Ticket';
+    $Lang->{'Checklist'}  = 'Checkliste';
+    $Lang->{'Manage Checklist for ticket'}  = 'Verwalten Sie eine Checkliste für das Ticket';
+    $Lang->{'Ticket Checklist'}  = 'Ticket Checkliste';
+    $Lang->{'edit'}  = 'bearbeiten';
+
 
     return 1;
 }
