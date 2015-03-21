@@ -221,7 +221,8 @@ sub _MaskForm {
             );
         }
 
-        for my $StateID ( sort { $StateList{$a} cmp $StateList{$b} } keys %StateList ) {
+        for my $StateID ( sort { $a <=> $b } keys %StateList ) {
+        #for my $StateID ( sort { $StateList{$a} cmp $StateList{$b} } keys %StateList ) {
             my %State = $Self->{StateObject}->TicketChecklistStatusGet(
                 ID => $StateID,
             );
