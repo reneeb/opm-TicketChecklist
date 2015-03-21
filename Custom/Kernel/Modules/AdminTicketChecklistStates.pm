@@ -70,7 +70,7 @@ sub Run {
 
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
- 
+
         # server side validation
         my %Errors;
         if (
@@ -214,14 +214,15 @@ sub _MaskForm {
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
         my %StateList = $StatusObject->TicketChecklistStatusList();
-  
+
         if ( !%StateList ) {
             $LayoutObject->Block(
                 Name => 'NoStateFound',
             );
         }
 
-        for my $StateID ( sort { $StateList{$a} cmp $StateList{$b} } keys %StateList ) {
+        for my $StateID ( sort { $a <=> $b } keys %StateList ) {
+        #for my $StateID ( sort { $StateList{$a} cmp $StateList{$b} } keys %StateList ) {
             my %State = $StatusObject->TicketChecklistStatusGet(
                 ID => $StateID,
             );
