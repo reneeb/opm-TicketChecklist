@@ -22,6 +22,16 @@ You can see a few screenshots at
 L<http://feature-addons.de/otrs/Ticket%20Zoom/TicketChecklist> (even though
 a some screenshots there are for the pro version).
 
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item * Denny Bresch, L<https://github.com/dennybresch>
+
+Added translations, cleaned up HTML
+
+=back
+
 =head1 SUPPORT
 
 If you have any questions, ideas for new features, bugreports and/or patches,
