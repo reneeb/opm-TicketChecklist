@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.28) -->
     <Name>TicketChecklist</Name>
-    <Version>0.3.4</Version>
+    <Version>0.3.5</Version>
     <Framework>3.3.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
