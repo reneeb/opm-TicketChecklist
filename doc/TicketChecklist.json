@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "framework": [
         "3.3.x"
     ],
