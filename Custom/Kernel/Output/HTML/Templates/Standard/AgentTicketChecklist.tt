@@ -7,6 +7,7 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
+<form action="[% Env("CGIHandle") %]" id="MainForm" method="post" name="compose" >
 <div class="LayoutPopup ARIARoleMain">
 
     <div class="Header">
@@ -16,7 +17,6 @@
         </p>
     </div>
 
-    <form action="[% Env("CGIHandle") %]" id="MainForm" method="post" name="compose" >
     <div class="Content">
         <div class="LayoutFixedSidebar SidebarLast">
             <div class="ContentColumn">
@@ -29,43 +29,43 @@
                         <h2>[% Translate("Checklist Settings") | html %]</h2>
                     </div>
                     <div class="Content">
-                            <fieldset class="TableLike">
-                                <input type="hidden" name="Action" value="[% Env("Action") %]"/>
-                                <input type="hidden" name="Subaction" value="Save"/>
-                                <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]" id="TicketID"/>
+                        <fieldset class="TableLike">
+                            <input type="hidden" name="Action" value="[% Env("Action") %]"/>
+                            <input type="hidden" name="Subaction" value="Save"/>
+                            <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]" id="TicketID"/>
 <script type="text/javascript">
 //<![CDATA[
     var Positions = '[% Data.Position | html %]';
 //]]>
 </script>
-                                <div class="Field ValueInsert">
-                                    <ol id="ChecklistItems">
+                            <div class="Field ValueInsert">
+                                <ol id="ChecklistItems">
 [% RenderBlockStart("Item") %]
-                                       <li id="Item_[% Data.Position | html %]"> <input type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
+                                    <li id="Item_[% Data.Position | html %]"> <input type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
                                         [% Data.StatusSelect %]
                                         <input type="hidden" name="ItemID_[% Data.Position | html %]" id="ItemID_[% Data.Position | html %]" value="[% Data.ID | html %]" />
                                         <button name="DelBtn" id="DelBtn_[% Data.Position | html %]"  class="DelBtn CallForAction"  title="[% Translate("-") | html %]" value="[% Translate("-") | html %]"><span>[% Translate("-") | html %]</span></button>
-                                       </li>
+                                    </li>
 [% RenderBlockEnd("Item") %]
-                                    </ol>
-                                </div>
+                                 </ol>
+                             </div>
 
-                                <div class="Field">
-                                        <button class="CallForAction Primary" id="AddBtn" accesskey="g" title="[% Translate("+") | html %] (g)" type="submit" value="[% Translate("+") | html %]"><span>[% Translate("+") | html %]</span></button>
-                                </div>
+                             <div class="Field">
+                                 <button class="CallForAction Primary" id="AddBtn" accesskey="g" title="[% Translate("+") | html %] (g)" type="submit" value="[% Translate("+") | html %]"><span>[% Translate("+") | html %]</span></button>
+                             </div>
 
-                            </fieldset>
+                        </fieldset>
 
                     </div>
                 </div>
+                <div class="WidgetSimple">
+                    <div class="Content">
+                        <fieldset class="TableLike">
+                            <button class="CallForAction Primary" id="Submit" accesskey="g" title="Submit (g)" type="submit" value="Submit"><span><i class="fa fa-check-square-o"></i>Submit</span></button></fieldset>
+                    </div></div>
             </div>
-            <div class="Clear"></div>
         </div>
         <div id="ChecklistTickets"></div>
-
     </div>
-    <div class="Footer">
-        <button class="CallForAction Primary" id="Submit" accesskey="g" title="[% Translate("Submit") | html %] (g)" type="submit" value="[% Translate("Submit") | html %]"><span><i class="fa fa-check-square-o"></i>[% Translate("Submit") | html %]</span></button>
-    </div>
-    </form>
 </div>
+</form>

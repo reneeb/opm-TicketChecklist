@@ -1,13 +1,13 @@
 # --
-# Kernel/Output/HTML/OutputFilterTicketChecklist.pm
-# Copyright (C) 2014 Perl-Services.de, http://www.perl-services.de/
+# Kernel/Output/HTML/FilterContent/TicketChecklist.pm
+# Copyright (C) 2014-2016 Perl-Services.de, http://www.perl-services.de/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-package Kernel::Output::HTML::OutputFilterTicketChecklist;
+package Kernel::Output::HTML::FilterContent::TicketChecklist;
 
 use strict;
 use warnings;
@@ -20,8 +20,6 @@ our @ObjectDependencies = qw(
     Kernel::System::PerlServices::TicketChecklist
     Kernel::System::PerlServices::TicketChecklistStatus
 );
-
-our $VERSION = 0.03;
 
 sub new {
     my ( $Type, %Param ) = @_;
