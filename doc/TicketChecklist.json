@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "framework": [
         "5.0.x"
     ],
@@ -11,7 +11,8 @@
     "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
     "description" : {
         "en": "Add a checklist to tickets",
-        "de": "Eine Checkliste für Tickets"
+        "de": "Eine Checkliste für Tickets",
+        "hu": "Egy ellenőrzőlista hozzáadása a jegyekhez"
     },
     "database" : [
        {
@@ -138,6 +139,13 @@
             "lang": "de",
             "title": "Vielen Dank!",
             "text": "Vielen Dank für die Wahl des TicketChecklist Moduls."
+        },
+        {
+            "type": "Install", 
+            "version": 0,
+            "lang": "hu",
+            "title": "Köszönjük!",
+            "text": "Köszönjük, hogy a jegy ellenőrzőlista modult választotta."
         }
     ]
 }

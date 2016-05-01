@@ -21,6 +21,7 @@ our @ObjectDependencies = qw(
     Kernel::System::PerlServices::TicketChecklistStatus
 );
 
+use Kernel::Language qw(Translatable);
 use Kernel::System::VariableCheck qw(:all);
 
 sub new {
@@ -54,8 +55,8 @@ sub Run {
     
             # error page
             return $LayoutObject->ErrorScreen(
-                Message => 'No TicketID is given!',
-                Comment => 'Please contact the admin.',
+                Message => Translatable('No TicketID is given!'),
+                Comment => Translatable('Please contact the admin.'),
             );
         }
     
@@ -71,7 +72,7 @@ sub Run {
     
             # error screen, don't show ticket
             return $LayoutObject->NoPermission(
-                Message    => "You need $Self->{Config}->{Permission} permissions!",
+                Message    => $LayoutObject->{LanguageObject}->Translate( 'You need %s permissions!', $Self->{Config}->{Permission} ),
                 WithHeader => 'yes',
             );
         }

@@ -1,0 +1,94 @@
+=encoding utf-8
+
+=head1 NÉV
+
+TicketChecklist - Legyen ellenőrzőlistája a jeggyel kapcsolatos tennivalókhoz
+
+=head1 LEÍRÁS
+
+Számos feladat előfordulhat, amelyet megemlítenek egy jegyben. Amikor egy jegy 
+egyre több követést kap, akkor már elég nehéz emlékezni arra, hogy mit kell 
+elvégezni a probléma megoldásához.
+
+Ebben az esetben hasznos lenne egy „tennivaló” lista vagy egy ellenőrzőlista. 
+Amint a jegy tulajdonosa azonosít egy olyan feladatot, amelyet mindenképpen el 
+kell végezni, akkor az a feladat hozzáadható az ellenőrzőlistához.
+
+Egy ilyen ellenőrzőlistát biztosít ez a kiegészítő. Egy új elem jelenik meg a 
+jegymenüben: „Ellenőrzőlista”.
+
+Amint létezik egy ellenőrzőlista a jegyhez, egy új felületi elemet fog látni a 
+jegynagyításban. A jegyinformációk mellett jelenik meg az ellenőrzőlista.
+
+=head1 KÖZREMŰKÖDŐK
+
+=over 4
+
+=item * Denny Bresch, L<https://github.com/dennybresch>
+
+Fordítások hozzáadása, HTML tisztítása
+
+=item * Úr Balázs, L<http://otrs-megoldasok.hu>
+
+Magyar fordítás
+
+=back
+
+=head1 TÁMOGATÁS
+
+Ha bármilyen kérdése van, ötletei vannak új funkciókra, hibajelentést és/vagy 
+javítócsomagokat küldene, akkor írjon nekem egy pár sort az 
+E<lt>otrs@perl-services.deE<gt> címre.
+
+Az itteni megjegyzéseket nem olvasom rendszeresen…
+
+=head1 PRO-VERZIÓ
+
+A L<http://otrs.perl-services.de/pro_pakete.html> címen elérhető egy 
+professzionális verzió, amely néhány további funkcióval rendelkezik:
+
+=over 4
+
+=item * Prioritások az ellenőrzőlista elemeihez
+
+=item * Felelősök az ellenőrzőlista elemeihez
+
+=item * Határidők az ellenőrzőlista elemeihez
+
+=item * Értesítések a jegy tulajdonosának, ha egy ellenőrzőlista-elemet új állapotba állítanak (beállítható)
+
+=item * Értesítés, amikor az esedékesség napját eléri
+
+=item * Jegyek áttekintője, amelyek nyitott ellenőrzőlista-elemekkel rendelkeznek
+
+=item * Ellenőrzőlista-elemek áttekintője („Saját ellenőrzőlista-elemek”)
+
+=item * Az ellenőrzőlista-elemek sorrendjének (pozíciójának) megváltoztatása
+
+=item * Ellenőrzőlisták egyesítése, amikor a jegyeket egyesítenek
+
+=back
+
+=head2 Ütemterv
+
+A következő funkciók vannak tervbe véve a jövőben:
+
+=over 4
+
+=item * Ellenőrzőlisták létrehozása sablonokból
+
+=back
+
+Ezek a funkciók először a professzionális verzióban lesznek kiadva.
+
+=head1 SZERZŐ ÉS LICENC
+
+Ez a modul az AGPL 3.0 szerint licencelt.
+
+Szerző: Renée Bäcker C<< <otrs@perl-services.de> >>
+
+=head1 MAGYAR FORDÍTÁS
+
+A magyar fordítást az OTRS-megoldások csapata készítette.
+Copyright (C) 2016 Úr Balázs, L<http://otrs-megoldasok.hu>
+
