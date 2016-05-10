@@ -10,7 +10,6 @@
     <Description Lang="en">Add a checklist to tickets</Description>
     <Description Lang="hu">Egy ellenőrzőlista hozzáadása a jegyekhez</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
-    <ChangeLog Version="0.5.2" Date="2016-04-11 08:56:38">Added Hungarian translation, thanks to Balázs Úr.</ChangeLog>
     <Filelist>
         <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
         <File Permission="644" Location="Custom/Kernel/Modules/AgentTicketChecklist.pm" />
