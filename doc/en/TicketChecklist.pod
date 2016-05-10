@@ -44,7 +44,8 @@ I do not read the comments here regularly...
 =head1 PRO-VERSION
 
 There is a pro version available at 
-L<http://otrs.perl-services.de/pro_pakete.html> that have a few more features:
+L<http://feature-addons.de/otrs/Ticket/TicketChecklist>
+that have a few more features:
 
 =over 4
 

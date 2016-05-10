@@ -44,7 +44,7 @@ Az itteni megjegyzéseket nem olvasom rendszeresen…
 
 =head1 PRO-VERZIÓ
 
-A L<http://otrs.perl-services.de/pro_pakete.html> címen elérhető egy 
+A L<http://feature-addons.de/otrs/Ticket/TicketChecklist> címen elérhető egy 
 professzionális verzió, amely néhány további funkcióval rendelkezik:
 
 =over 4
