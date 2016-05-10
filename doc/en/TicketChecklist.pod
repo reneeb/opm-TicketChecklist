@@ -1,3 +1,5 @@
+=encoding utf-8
+
 =head1 NAME
 
 TicketChecklist - Have a checklist for you todos with regard to the ticket
@@ -16,11 +18,7 @@ Such a checklist is provided by this addon. A new item in the ticket menu
 appears: "Checklist".
 
 As soon as a checklist for a ticket exists, you'll see a new widget in the
-ticket zoom. Near by the ticket information the checklist is shown. 
-
-You can see a few screenshots at
-L<http://feature-addons.de/otrs/Ticket%20Zoom/TicketChecklist> (even though
-a some screenshots there are for the pro version).
+ticket zoom. Near by the ticket information the checklist is shown.
 
 =head1 CONTRIBUTORS
 
@@ -30,20 +28,23 @@ a some screenshots there are for the pro version).
 
 Added translations, cleaned up HTML
 
+=item * Balázs Úr, L<http://www.otrs-megoldasok.hu>
+
+Hungarian translation
+
 =back
 
 =head1 SUPPORT
 
 If you have any questions, ideas for new features, bugreports and/or patches,
-please drop me a line at otrs@perl-services.de.
+please drop me a line at E<lt>otrs@perl-services.deE<gt>.
 
 I do not read the comments here regularly...
 
 =head1 PRO-VERSION
 
 There is a pro version available at 
-L<http://feature-addons.de/otrs/Ticket%20Zoom/TicketChecklist> that
-have a few more features:
+L<http://otrs.perl-services.de/pro_pakete.html> that have a few more features:
 
 =over 4
 
@@ -83,5 +84,5 @@ Those features will be released in the pro version first.
 
 This module is licensed under the terms of AGPL 3.0.
 
-Author: Renee Bäcker C<< <otrs@perl-services.de> >>
+Author: Renée Bäcker C<< <otrs@perl-services.de> >>
 

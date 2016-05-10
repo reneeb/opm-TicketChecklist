@@ -44,14 +44,14 @@
                                     <li id="Item_[% Data.Position | html %]"> <input type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
                                         [% Data.StatusSelect %]
                                         <input type="hidden" name="ItemID_[% Data.Position | html %]" id="ItemID_[% Data.Position | html %]" value="[% Data.ID | html %]" />
-                                        <button name="DelBtn" id="DelBtn_[% Data.Position | html %]"  class="DelBtn CallForAction"  title="[% Translate("-") | html %]" value="[% Translate("-") | html %]"><span>[% Translate("-") | html %]</span></button>
+                                        <button name="DelBtn" id="DelBtn_[% Data.Position | html %]"  class="DelBtn CallForAction"  title="[% Translate("Remove item") | html %]" value="[% Translate("-") | html %]"><span>[% Translate("-") | html %]</span></button>
                                     </li>
 [% RenderBlockEnd("Item") %]
                                  </ol>
                              </div>
 
                              <div class="Field">
-                                 <button class="CallForAction Primary" id="AddBtn" accesskey="g" title="[% Translate("+") | html %] (g)" type="submit" value="[% Translate("+") | html %]"><span>[% Translate("+") | html %]</span></button>
+                                 <button class="CallForAction Primary" id="AddBtn" accesskey="g" title="[% Translate("Add item") | html %] (g)" type="submit" value="[% Translate("+") | html %]"><span>[% Translate("+") | html %]</span></button>
                              </div>
 
                         </fieldset>
@@ -61,7 +61,7 @@
                 <div class="WidgetSimple">
                     <div class="Content">
                         <fieldset class="TableLike">
-                            <button class="CallForAction Primary" id="Submit" accesskey="g" title="Submit (g)" type="submit" value="Submit"><span><i class="fa fa-check-square-o"></i>Submit</span></button></fieldset>
+                            <button class="CallForAction Primary" id="Submit" accesskey="g" title="[% Translate("Submit") | html %] (g)" type="submit" value="Submit"><span><i class="fa fa-check-square-o"></i>[% Translate("Submit") | html %]</span></button></fieldset>
                     </div></div>
             </div>
         </div>

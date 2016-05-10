@@ -2,13 +2,15 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.33) -->
     <Name>TicketChecklist</Name>
-    <Version>0.5.1</Version>
+    <Version>0.5.2</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Eine Checkliste für Tickets</Description>
     <Description Lang="en">Add a checklist to tickets</Description>
+    <Description Lang="hu">Egy ellenőrzőlista hozzáadása a jegyekhez</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
+    <ChangeLog Version="0.5.2" Date="2016-04-11 08:56:38">Added Hungarian translation, thanks to Balázs Úr.</ChangeLog>
     <Filelist>
         <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
         <File Permission="644" Location="Custom/Kernel/Modules/AgentTicketChecklist.pm" />
@@ -21,8 +23,10 @@
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistStatus.pm" />
         <File Permission="644" Location="Kernel/Config/Files/TicketChecklist.xml" />
         <File Permission="644" Location="Kernel/Language/de_TicketChecklist.pm" />
+        <File Permission="644" Location="Kernel/Language/hu_TicketChecklist.pm" />
         <File Permission="644" Location="doc/TicketChecklist.json" />
         <File Permission="644" Location="doc/en/TicketChecklist.pod" />
+        <File Permission="644" Location="doc/hu/TicketChecklist.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/PS.TicketChecklist.js" />
         <File Permission="644" Location="var/httpd/htdocs/js/PS.TicketChecklistWidget.js" />
         <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/img/ps/arrow_down.png" />
@@ -104,5 +108,8 @@
     ]]></IntroInstall>
     <IntroInstall Type="post" Lang="de" Title="Vielen Dank!"><![CDATA[
             Vielen Dank für die Wahl des TicketChecklist Moduls.
+    ]]></IntroInstall>
+    <IntroInstall Type="post" Lang="hu" Title="Köszönjük!"><![CDATA[
+            Köszönjük, hogy a jegy ellenőrzőlista modult választotta.
     ]]></IntroInstall>
 </otrs_package>
