@@ -85,6 +85,19 @@ sub Run {
             Name => 'Item',
             Data => $Item,
         );
+
+        if ( !$Item->{ArticleID} ) {
+            $LayoutObject->Block(
+                Name => 'TitlePlain',
+                Data => $Item,
+            );
+        }
+        else {
+            $LayoutObject->Block(
+                Name => 'TitleLink',
+                Data => $Item,
+            );
+        }
     }
 
     my $Snippet = $LayoutObject->Output(

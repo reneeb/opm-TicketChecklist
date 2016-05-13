@@ -85,6 +85,8 @@ sub Data {
     $Lang->{'done'} = '';
     $Lang->{'rejected'} = '';
 
+    $Lang->{'Article #'} = 'Artikel #';
+
     return 1;
 }
 

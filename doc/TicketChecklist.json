@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "framework": [
         "5.0.x"
     ],
@@ -25,6 +25,8 @@
                 { "name": "position", "required": "true", "type": "SMALLINT" },
                 { "name": "status_id", "required": "true", "type": "INTEGER" },
                 { "name": "ticket_id", "required": "true", "type": "BIGINT" },
+                { "name": "article_id", "required": "false", "type": "SMALLINT" },
+                { "name": "article_number", "required": "false", "type": "SMALLINT" },
                 { "name": "create_time", "required": "true", "type": "DATE" },
                 { "name": "create_by", "required": "true", "type": "INTEGER" },
                 { "name": "change_time", "required": "true", "type": "DATE" },
@@ -122,6 +124,15 @@
                 { "name": "change_time", "value": "current_timestamp" },
                 { "name": "change_by", "value": "1" },
                 { "name": "valid_id", "value": "1" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "version": "0.5.3",
+            "name": "ps_ticketchecklist",
+            "columns": [
+                { "name": "article_id", "required": "false", "type": "SMALLINT" },
+                { "name": "article_number", "required": "false", "type": "SMALLINT" }
             ]
         }
     ],

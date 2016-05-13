@@ -44,10 +44,15 @@ PS.TicketChecklist = (function (TargetNS) {
                     StatusSelect.append( Status );
                 });
 
-                var TitleInput = $( '<input type="text" id="ItemTitle_' + response.Position + '" name="ItemTitle_' + response.Position + '">' );
+                var TitleInput = $( '<input class="W50pc" type="text" id="ItemTitle_' + response.Position + '" name="ItemTitle_' + response.Position + '">' );
+                var ArticleNr = $( '<input style="width: 25px;" type="text" id="ItemArticleNumber_' + response.Position + '" name="ItemArticleNumber_' + response.Position + '">' );
                 var DeleteBtn  = $( '<button name="DelBtn" id="DelBtn_' + response.Position + '" class="DelBtn CallForAction" value="-"><span>-</span></button>' );
                 var ListItem = $('<li id="Item_' + response.Position + '">').append(
                     TitleInput
+                ).append(
+                    $( '<span>' + Core.Config.Get('PS.Checklist.ArticleNumber_text') + '</span>' )
+                ).append(
+                    ArticleNr
                 ).append(
                     StatusSelect
                 ).append(

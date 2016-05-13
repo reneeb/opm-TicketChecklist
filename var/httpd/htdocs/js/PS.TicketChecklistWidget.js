@@ -57,5 +57,10 @@ PS.TicketChecklistWidget = (function (TargetNS) {
         return false;
     });
 
+    TargetNS.GotoArticle = function( ArticleID ) {
+        window.location.hash = ArticleID;
+        Core.Agent.TicketZoom.CheckURLHash();
+    };
+
     return TargetNS;
 }(PS.TicketChecklistWidget || {}));

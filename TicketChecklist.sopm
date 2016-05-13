@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.33) -->
     <Name>TicketChecklist</Name>
-    <Version>0.5.2</Version>
+    <Version>0.5.3</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -38,6 +38,8 @@
             <Column Name="position" Required="true" Type="SMALLINT" />
             <Column Name="status_id" Required="true" Type="INTEGER" />
             <Column Name="ticket_id" Required="true" Type="BIGINT" />
+            <Column Name="article_id" Required="false" Type="SMALLINT" />
+            <Column Name="article_number" Required="false" Type="SMALLINT" />
             <Column Name="create_time" Required="true" Type="DATE" />
             <Column Name="create_by" Required="true" Type="INTEGER" />
             <Column Name="change_time" Required="true" Type="DATE" />
@@ -98,6 +100,12 @@
             <Data Key="valid_id">1</Data>
         </Insert>
     </DatabaseInstall>
+    <DatabaseUpgrade Type="post">
+        <TableAlter Name="ps_ticketchecklist" Version="0.5.3">
+            <ColumnAdd Name="article_id" Required="false" Type="SMALLINT" />
+            <ColumnAdd Name="article_number" Required="false" Type="SMALLINT" />
+        </TableAlter>
+    </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
         <TableDrop Name="ps_ticketchecklist_status" />
         <TableDrop Name="ps_ticketchecklist" />

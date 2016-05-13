@@ -114,16 +114,32 @@ sub Run {
 
         my @ChecklistItems;
 
-        for my $Pos ( @Positions ) {
-            my $Title = $ParamObject->GetParam( Param => 'ItemTitle_' . $Pos );
-            my $State = $ParamObject->GetParam( Param => 'ItemStatus_' . $Pos );
-            my $ID    = $ParamObject->GetParam( Param => 'ItemID_' . $Pos );
+        my @ArticleBox = $TicketObject->ArticleGet(
+            TicketID => $Self->{TicketID},
+            UserID   => $Self->{UserID},
+        );
+
+        for my $Pos ( sort{ $a <=> $b } @Positions ) {
+            my $Title         = $ParamObject->GetParam( Param => 'ItemTitle_' . $Pos );
+            my $State         = $ParamObject->GetParam( Param => 'ItemStatus_' . $Pos );
+            my $ID            = $ParamObject->GetParam( Param => 'ItemID_' . $Pos );
+            my $ArticleNumber = $ParamObject->GetParam( Param => 'ItemArticleNumber_' . $Pos );
+
+            my $ArticleID;
+            if ( $ArticleNumber ) {
+                my $Index   = $ArticleNumber - 1;
+                my $Article = $ArticleBox[$Index] || {};
+
+                $ArticleID = $Article->{ArticleID};
+            }
 
             push @ChecklistItems, +{
-                StateID  => $State,
-                ID       => $ID,
-                Title    => $Title,
-                Position => $Pos,
+                StatusID      => $State,
+                ID            => $ID,
+                Title         => $Title,
+                Position      => $Pos,
+                ArticleNumber => $ArticleNumber,
+                ArticleID     => $ArticleID,
             };
 
             if ( !defined $Title ) {
@@ -149,10 +165,9 @@ sub Run {
         my $Counter = 1;
 
         POS:
-        for my $Pos ( sort { $a <=> $b }@Positions ) {
-            my $Title = $ParamObject->GetParam( Param => 'ItemTitle_' . $Pos );
-            my $State = $ParamObject->GetParam( Param => 'ItemStatus_' . $Pos );
-            my $ID    = $ParamObject->GetParam( Param => 'ItemID_' . $Pos );
+        for my $Item ( @ChecklistItems ) {
+            my $Title = $Item->{Title};
+            my $ID    = $Item->{ID};
 
             next POS if !$Title;
 
@@ -163,13 +178,13 @@ sub Run {
                 $Opts{ID} = $ID;
             }
 
+            delete $Item->{ID};
+
             $ChecklistObject->$Method(
+                %{$Item},
                 %Opts,
-                Title    => $Title,
-                StatusID => $State,
-                TicketID => $TicketID,
-                Position => $Counter++,
-                UserID   => $Self->{UserID},
+                TicketID      => $TicketID,
+                UserID        => $Self->{UserID},
             );
         }
 

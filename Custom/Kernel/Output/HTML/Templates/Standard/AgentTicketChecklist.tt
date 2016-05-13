@@ -41,7 +41,9 @@
                             <div class="Field ValueInsert">
                                 <ol id="ChecklistItems">
 [% RenderBlockStart("Item") %]
-                                    <li id="Item_[% Data.Position | html %]"> <input type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
+                                    <li id="Item_[% Data.Position | html %]"> <input class="W50pc" type="text" id="ItemTitle_[% Data.Position | html %]" name="ItemTitle_[% Data.Position | html %]" value="[% Data.Title | html %]" />
+                                        [% Translate('Article #') | html %]:
+                                        <input type="text" style="width: 25px" name="ItemArticleNumber_[% Data.Position | html %]" id="ItemArticleNumber_[% Data.Position | html %]" value="[% Data.ArticleNumber | html %]" />
                                         [% Data.StatusSelect %]
                                         <input type="hidden" name="ItemID_[% Data.Position | html %]" id="ItemID_[% Data.Position | html %]" value="[% Data.ID | html %]" />
                                         <button name="DelBtn" id="DelBtn_[% Data.Position | html %]"  class="DelBtn CallForAction"  title="[% Translate("Remove item") | html %]" value="[% Translate("-") | html %]"><span>[% Translate("-") | html %]</span></button>
@@ -69,3 +71,8 @@
     </div>
 </div>
 </form>
+[% WRAPPER JSOnDocumentComplete %]
+<script type="text/javascript">//<![CDATA[
+Core.Config.Set('PS.Checklist.ArticleNumber_text','[% Translate("Article #") | html %]' );
+//]]></script>
+[% END %]

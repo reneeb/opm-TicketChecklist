@@ -17,6 +17,7 @@ our @ObjectDependencies = qw(
     Kernel::System::DB
     Kernel::System::User
     Kernel::System::Valid
+    Kernel::System::Ticket
     Kernel::System::PerlServices::TicketChecklistStatus
 );
 
@@ -101,17 +102,22 @@ sub TicketChecklistAdd {
         return;
     }
 
+    $Param{ArticleID}     //= 0;
+    $Param{ArticleNumber} //= 0;
+
     # insert new item
     return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_ticketchecklist '
-            . '(title, position, status_id, ticket_id, '
+            . '(title, position, status_id, ticket_id, article_id, article_number, '
             . ' create_time, create_by, change_time, change_by) '
-            . 'VALUES (?, ?, ?, ?, current_timestamp, ?, current_timestamp, ?)',
+            . 'VALUES (?, ?, ?, ?, ?, ?, current_timestamp, ?, current_timestamp, ?)',
         Bind => [
             \$Param{Title},
             \$Param{Position},
             \$Param{StatusID},
             \$Param{TicketID},
+            \$Param{ArticleID},
+            \$Param{ArticleNumber},
             \$Param{UserID},
             \$Param{UserID},
         ],
@@ -183,10 +189,14 @@ sub TicketChecklistUpdate {
         $Param{StatusID} = $StatusObject->TicketChecklistStatusLookup( Name => $Param{Status} );
     }
 
+    $Param{ArticleID}     //= 0;
+    $Param{ArticleNumber} //= 0;
+
     # insert new news
     return if !$DBObject->Do(
         SQL => 'UPDATE ps_ticketchecklist SET '
             . ' title = ?, position = ?, status_id = ?, ticket_id = ?, '
+            . ' article_id = ?, article_number = ?, '
             . ' change_time = current_timestamp, change_by = ? '
             . ' WHERE id = ?',
         Bind => [
@@ -194,6 +204,8 @@ sub TicketChecklistUpdate {
             \$Param{Position},
             \$Param{StatusID},
             \$Param{TicketID},
+            \$Param{ArticleID},
+            \$Param{ArticleNumber},
             \$Param{UserID},
             \$Param{ID},
         ],
@@ -242,6 +254,7 @@ sub TicketChecklistGet {
     # sql
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, title, status_id, position, ticket_id, '
+            . 'article_id, article_number, '
             . 'create_by, create_time, change_by, change_time '
             . 'FROM ps_ticketchecklist WHERE id = ?',
         Bind  => [ \$Param{ID} ],
@@ -251,15 +264,17 @@ sub TicketChecklistGet {
     my %TicketChecklist;
     while ( my @Data = $DBObject->FetchrowArray() ) {
         %TicketChecklist = (
-            ID         => $Data[0],
-            Title      => $Data[1],
-            StatusID   => $Data[2],
-            Position   => $Data[3],
-            TicketID   => $Data[4],
-            CreateBy   => $Data[5],
-            CreateTime => $Data[6],
-            ChangeBy   => $Data[7],
-            ChangeTime => $Data[8],
+            ID            => $Data[0],
+            Title         => $Data[1],
+            StatusID      => $Data[2],
+            Position      => $Data[3],
+            TicketID      => $Data[4],
+            ArticleID     => $Data[5],
+            ArticleNumber => $Data[6],
+            CreateBy      => $Data[7],
+            CreateTime    => $Data[8],
+            ChangeBy      => $Data[9]  || '',
+            ChangeTime    => $Data[10] || '',
         );
     }
 
@@ -328,7 +343,8 @@ sub TicketChecklistTicketGet {
         }
     }
 
-    my $SQL = 'SELECT id, title, position, status_id, ticket_id '
+    my $SQL = 'SELECT id, title, position, status_id, ticket_id, '
+        . ' article_id, article_number '
         . ' FROM ps_ticketchecklist '
         . ' WHERE ticket_id = ? '
         . ' ORDER BY position ASC';
@@ -343,11 +359,13 @@ sub TicketChecklistTicketGet {
     my @ChecklistItems;
     while ( my @Row = $DBObject->FetchrowArray() ) {
         push @ChecklistItems, {
-            ID       => $Row[0],
-            Title    => $Row[1],
-            Position => $Row[2],
-            StatusID => $Row[3],
-            TicketID => $Row[4],
+            ID            => $Row[0],
+            Title         => $Row[1],
+            Position      => $Row[2],
+            StatusID      => $Row[3],
+            TicketID      => $Row[4],
+            ArticleID     => $Row[5] || '',
+            ArticleNumber => $Row[6] || '',
         };
     }
 
@@ -361,8 +379,9 @@ sub TicketChecklistTicketGet {
 sub TicketChecklistMerge {
     my ($Self, %Param) = @_;
 
-    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+    my $LogObject    = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject     = $Kernel::OM->Get('Kernel::System::DB');
+    my $TicketObject = $Kernel::OM->Get('Kernel::System::Ticket');
 
     for my $Needed (qw(NewTicketID OldTicketID)) {
         if ( !$Param{$Needed} ) {
@@ -379,13 +398,59 @@ sub TicketChecklistMerge {
         . ' SET ticket_id = ? '
         . ' WHERE ticket_id = ?';
 
-    return $DBObject->Do(
+    return if !$DBObject->Do(
         SQL  => $SQL,
         Bind => [
             \$Param{NewTicketID},
             \$Param{OldTicketID},
         ],
     );
+
+    # recalc article numbers
+    my @Items = $Self->TicketChecklistTicketGet(
+        TicketID => $Param{NewTicketID},
+    );
+
+    my @ArticleBox = $TicketObject->ArticleGet(
+        TicketID      => $Param{NewTicketID},
+        UserID        => $Param{UserID},
+        DynamicFields => 0,
+        Order         => 'ASC',
+    );
+
+    my %ItemsToUpdate;
+
+    ITEM:
+    for my $Item ( @Items ) {
+        next ITEM if !$Item->{ArticleID};
+
+        my $ArticleID              = $Item->{ArticleID};
+        $ItemsToUpdate{$ArticleID} = $Item->{ID};
+    }
+
+    my $ArticleSQL = qq~
+        UPDATE ps_ticketchecklist
+        SET article_number = ?
+        WHERE id = ? AND article_id = ?
+    ~;
+
+    my $Counter = 0;
+
+    ARTICLE:
+    for my $Article ( @ArticleBox ) {
+        $Counter++;
+
+        my $ArticleID = $Article->{ArticleID};
+
+        next ARTICLE if !$ItemsToUpdate{$ArticleID};
+
+        $DBObject->Do(
+            SQL  => $ArticleSQL,
+            Bind => [ \$Counter, \$ItemsToUpdate{$ArticleID}, \$ArticleID ],
+        );
+    }
+
+    return 1;
 }
 
 1;
