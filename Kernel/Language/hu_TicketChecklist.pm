@@ -70,6 +70,7 @@ sub Data {
     $Lang->{'Cancel & close window'} = 'Mégse és ablak bezárása';
     $Lang->{'Toggle this widget'} = 'Felületi elem ki- vagy bekapcsolása';
     $Lang->{'Checklist Settings'} = 'Ellenőrzőlista beállítások';
+    $Lang->{'Article #'} = 'Bejegyzés #';
     $Lang->{'Remove item'} = 'Elem eltávolítása';
     $Lang->{'Add item'} = 'Elem hozzáadása';
     $Lang->{'Submit'} = 'Elküldés';
