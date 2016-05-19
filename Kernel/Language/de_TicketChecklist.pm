@@ -67,6 +67,7 @@ sub Data {
     $Lang->{'Cancel & close window'} = '';
     $Lang->{'Toggle this widget'} = '';
     $Lang->{'Checklist Settings'} = 'Checkliste Einstellungen';
+    $Lang->{'Article #'} = 'Artikel #';
     $Lang->{'Remove item'} = '';
     $Lang->{'Add item'} = '';
     $Lang->{'Submit'} = '';
@@ -84,8 +85,6 @@ sub Data {
     $Lang->{'open'} = '';
     $Lang->{'done'} = '';
     $Lang->{'rejected'} = '';
-
-    $Lang->{'Article #'} = 'Artikel #';
 
     return 1;
 }
