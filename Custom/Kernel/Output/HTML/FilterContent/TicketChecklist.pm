@@ -77,7 +77,6 @@ sub Run {
             Data        => \%StatusList,
             SelectedID  => $Item->{StatusID},
             Translation => 1,
-            Class       => 'Modernize',
         );
 
         $Item->{Color} = $StatusColors{ $Item->{StatusID} };
