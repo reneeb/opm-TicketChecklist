@@ -15,7 +15,7 @@
         <h2>[% Translate("Ticket Checklist") | html %]</h2>
     </div>
     <div class="Content">
-                <fieldset class="TableLike FixedLabelSmall">
+                <fieldset class="TableLike FixedLabelSmall TicketChecklist">
                   <input type="hidden" id="ChecklistTicketID" name="ChecklistTicketID" value="[% Data.TicketID | html %]" />
 [% RenderBlockStart("Item") %]
 [% RenderBlockStart("TitleLink") %]
