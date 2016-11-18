@@ -117,7 +117,9 @@ sub Run {
     }
 
     my $JS = $LayoutObject->Output(
-        Template => '<script type="text/javascript" src="[% Config("Frontend::JavaScriptPath") | html %]PS.TicketChecklistWidget.js"></script>',
+        Template => q~
+            <script type="text/javascript" src="[% Config("Frontend::JavaScriptPath") | html %]PS.TicketChecklistWidget.js"></script>
+        ~,
     );
 
     ${ $Param{Data} } =~ s{</body}{$JS</body};

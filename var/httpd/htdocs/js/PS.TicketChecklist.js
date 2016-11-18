@@ -65,6 +65,8 @@ PS.TicketChecklist = (function (TargetNS) {
                     ListItem
                 );
 
+                Core.UI.InputFields.InitSelect( StatusSelect );
+
                 Positions = response.Position;
             }
         });

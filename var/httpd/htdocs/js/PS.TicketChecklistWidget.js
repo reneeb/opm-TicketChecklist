@@ -45,17 +45,24 @@ PS.TicketChecklistWidget = (function (TargetNS) {
         });
     };
 
-    $('select[name^="ItemStatusWidget"]').bind( 'click', function() {
-        var Pos       = $(this).attr('id').match( /\d+/ );
-        var ID        = $('#ItemID_' + Pos[0]);
-        var TicketID  = $('#ChecklistTicketID').val();
+    TargetNS.Init = function() {
 
-        if ( ID ) {
-            UpdateItem( ID.val(), $(this).val(), TicketID, Pos[0] );
-        }
+        Core.UI.InputFields.InitSelect( $('select[id^="ItemStatusWidget_"]') );
 
-        return false;
-    });
+        $('select[name^="ItemStatusWidget"]').bind( 'change', function() {
+            var Pos       = $(this).attr('id').match( /\d+/ );
+            var ID        = $('#ItemID_' + Pos[0]);
+            var TicketID  = $('#ChecklistTicketID').val();
+
+            if ( ID ) {
+                UpdateItem( ID.val(), $(this).val(), TicketID, Pos[0] );
+            }
+
+            return false;
+        });
+    };
+
+    TargetNS.Init();
 
     TargetNS.GotoArticle = function( ArticleID ) {
         window.location.hash = ArticleID;
