@@ -206,6 +206,7 @@ sub Run {
                 Data          => \%StatusList,
                 Translation   => 1,
                 SelectedValue => $DefaultValue,
+                Class         => 'Modernize',
             }
         ]);
 
@@ -298,6 +299,7 @@ sub Form {
             Data        => \%StatusList,
             SelectedID  => $Item->{StatusID},
             Translation => 1,
+            Class       => 'Modernize',
         );
 
         $LayoutObject->Block(

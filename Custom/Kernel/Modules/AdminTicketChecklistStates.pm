@@ -209,6 +209,7 @@ sub _MaskForm {
         Size       => 1,
         SelectedID => $Param{ValidID} || $ValidID,
         HTMLQuote  => 1,
+        Class      => 'Modernize',
     );
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
