@@ -73,6 +73,6 @@
 </form>
 [% WRAPPER JSOnDocumentComplete %]
 <script type="text/javascript">//<![CDATA[
-Core.Config.Set('PS.Checklist.ArticleNumber_text','[% Translate("Article #") | html %]' );
+Core.Config.Set('PS.Checklist.ArticleNumber_text',' [% Translate("Article #") | html %]: ' );
 //]]></script>
 [% END %]

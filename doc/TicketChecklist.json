@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "framework": [
         "5.0.x"
     ],
@@ -10,9 +10,9 @@
     },
     "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
     "description" : {
-        "en": "Add a checklist to tickets",
-        "de": "Eine Checkliste für Tickets",
-        "hu": "Egy ellenőrzőlista hozzáadása a jegyekhez"
+        "en": "Add a checklist to tickets.",
+        "de": "Eine Checkliste für Tickets.",
+        "hu": "Egy ellenőrzőlista hozzáadása a jegyekhez."
     },
     "database" : [
        {
@@ -91,7 +91,7 @@
             "columns": [
                 { "name": "name", "type": "Quote", "value": "open" },
                 { "name": "valid_id", "value": "1" },
-                { "name": "color", "value": "gray", "type": "Quote" },
+                { "name": "color", "value": "#CDCDCD", "type": "Quote" },
                 { "name": "create_time", "value": "current_timestamp" },
                 { "name": "create_by", "value": "1" },
                 { "name": "change_time", "value": "current_timestamp" },
@@ -105,7 +105,7 @@
             "columns": [
                 { "name": "name", "type": "Quote", "value": "done" },
                 { "name": "valid_id", "value": "1" },
-                { "name": "color", "value": "green", "type":"Quote" },
+                { "name": "color", "value": "#8BEF4D", "type":"Quote" },
                 { "name": "create_time", "value": "current_timestamp" },
                 { "name": "create_by", "value": "1" },
                 { "name": "change_time", "value": "current_timestamp" },
@@ -118,7 +118,21 @@
             "version": 0,
             "columns": [
                 { "name": "name", "type": "Quote", "value": "rejected" },
-                { "name": "color", "value": "red", "type": "Quote" },
+                { "name": "color", "value": "#FF505E", "type": "Quote" },
+                { "name": "create_time", "value": "current_timestamp" },
+                { "name": "create_by", "value": "1" },
+                { "name": "change_time", "value": "current_timestamp" },
+                { "name": "change_by", "value": "1" },
+                { "name": "valid_id", "value": "1" }
+            ]
+        },
+        {
+            "type": "Insert",
+            "name": "ps_ticketchecklist_status",
+            "version": 0,
+            "columns": [
+                { "name": "name", "type": "Quote", "value": "in progress" },
+                { "name": "color", "value": "#FFDD50", "type": "Quote" },
                 { "name": "create_time", "value": "current_timestamp" },
                 { "name": "create_by", "value": "1" },
                 { "name": "change_time", "value": "current_timestamp" },

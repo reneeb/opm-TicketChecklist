@@ -20,13 +20,11 @@
 [% RenderBlockStart("Item") %]
 [% RenderBlockStart("TitleLink") %]
                 <label>
-                    <a href="javascript:void(0)" onclick="PS.TicketChecklistWidget.GotoArticle('[% Data.ArticleID | uri %]')">
-                       [% Data.Title | html %]
-                    </a>:
+                    <a href="javascript:void(0)" onclick="PS.TicketChecklistWidget.GotoArticle('[% Data.ArticleID | uri %]')">[% Data.Title | html %]</a>:
                 </label>
 [% RenderBlockEnd("TitleLink") %]
 [% RenderBlockStart("TitlePlain") %]
-                 <label>[% Data.Title | html %]: </label>
+                 <label>[% Data.Title | html %]:</label>
 [% RenderBlockEnd("TitlePlain") %]
                           <p class="Value" title="[% Data.Title | html %]">
                             <span style="background-color: [% Data.Color | html %]" id="ItemFlag_[% Data.Position | html %]">
