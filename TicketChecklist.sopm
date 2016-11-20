@@ -2,13 +2,13 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.35) -->
     <Name>TicketChecklist</Name>
-    <Version>0.5.5</Version>
+    <Version>0.5.6</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
-    <Description Lang="de">Eine Checkliste für Tickets</Description>
-    <Description Lang="en">Add a checklist to tickets</Description>
-    <Description Lang="hu">Egy ellenőrzőlista hozzáadása a jegyekhez</Description>
+    <Description Lang="de">Eine Checkliste für Tickets.</Description>
+    <Description Lang="en">Add a checklist to tickets.</Description>
+    <Description Lang="hu">Egy ellenőrzőlista hozzáadása a jegyekhez.</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Filelist>
         <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
@@ -75,7 +75,7 @@
         <Insert Table="ps_ticketchecklist_status">
             <Data Key="name" Type="Quote"><![CDATA[open]]></Data>
             <Data Key="valid_id">1</Data>
-            <Data Key="color" Type="Quote"><![CDATA[gray]]></Data>
+            <Data Key="color" Type="Quote"><![CDATA[#CDCDCD]]></Data>
             <Data Key="create_time">current_timestamp</Data>
             <Data Key="create_by">1</Data>
             <Data Key="change_time">current_timestamp</Data>
@@ -84,7 +84,7 @@
         <Insert Table="ps_ticketchecklist_status">
             <Data Key="name" Type="Quote"><![CDATA[done]]></Data>
             <Data Key="valid_id">1</Data>
-            <Data Key="color" Type="Quote"><![CDATA[green]]></Data>
+            <Data Key="color" Type="Quote"><![CDATA[#8BEF4D]]></Data>
             <Data Key="create_time">current_timestamp</Data>
             <Data Key="create_by">1</Data>
             <Data Key="change_time">current_timestamp</Data>
@@ -92,7 +92,16 @@
         </Insert>
         <Insert Table="ps_ticketchecklist_status">
             <Data Key="name" Type="Quote"><![CDATA[rejected]]></Data>
-            <Data Key="color" Type="Quote"><![CDATA[red]]></Data>
+            <Data Key="color" Type="Quote"><![CDATA[#FF505E]]></Data>
+            <Data Key="create_time">current_timestamp</Data>
+            <Data Key="create_by">1</Data>
+            <Data Key="change_time">current_timestamp</Data>
+            <Data Key="change_by">1</Data>
+            <Data Key="valid_id">1</Data>
+        </Insert>
+        <Insert Table="ps_ticketchecklist_status">
+            <Data Key="name" Type="Quote"><![CDATA[in progress]]></Data>
+            <Data Key="color" Type="Quote"><![CDATA[#FFDD50]]></Data>
             <Data Key="create_time">current_timestamp</Data>
             <Data Key="create_by">1</Data>
             <Data Key="change_time">current_timestamp</Data>

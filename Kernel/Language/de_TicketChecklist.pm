@@ -31,6 +31,7 @@ sub Data {
     $Lang->{'Enable/Disable debugging feature.'} = '';
     $Lang->{'No'} = 'Nein';
     $Lang->{'Yes'} = 'Ja';
+    $Lang->{'The default state for a new checklist item.'} = '';
     $Lang->{'Frontend module registration for ticket checklist module.'} =
         'Frontendmodul-Registration für das Checklisten-Modul.';
     $Lang->{'Maintain ticket checklists.'} = '';
@@ -85,6 +86,7 @@ sub Data {
     $Lang->{'open'} = '';
     $Lang->{'done'} = '';
     $Lang->{'rejected'} = '';
+    $Lang->{'in progress'} = '';
 
     return 1;
 }

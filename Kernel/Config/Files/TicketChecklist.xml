@@ -45,7 +45,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="TicketChecklist::DefaultState" Required="0" Valid="1">
-        <Description Translatable="1"></Description>
+        <Description Translatable="1">The default state for a new checklist item.</Description>
         <Group>TicketChecklist</Group>
         <SubGroup>Checklist</SubGroup>
         <Setting>

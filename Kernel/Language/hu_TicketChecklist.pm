@@ -33,6 +33,7 @@ sub Data {
     $Lang->{'Enable/Disable debugging feature.'} = 'Hibakeresési funkció engedélyezése vagy letiltása.';
     $Lang->{'No'} = 'Nem';
     $Lang->{'Yes'} = 'Igen';
+    $Lang->{'The default state for a new checklist item.'} = 'Egy új ellenőrzőlista-elem alapértelmezett állapota.';
     $Lang->{'Frontend module registration for ticket checklist module.'} =
         'Előtétprogram-modul regisztráció a jegy ellenőrzőlista modulhoz.';
     $Lang->{'Maintain ticket checklists.'} = 'Jegy ellenőrzőlisták karbantartása.';
@@ -88,6 +89,7 @@ sub Data {
     $Lang->{'open'} = 'nyitott';
     $Lang->{'done'} = 'kész';
     $Lang->{'rejected'} = 'elutasítva';
+    $Lang->{'in progress'} = 'folyamatban';
 
     return 1;
 }
