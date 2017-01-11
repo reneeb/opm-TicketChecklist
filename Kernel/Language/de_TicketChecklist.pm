@@ -24,69 +24,69 @@ sub Data {
     return if ref $Lang ne 'HASH';
 
     # Kernel/Config/Files/TicketChecklist.xml
-    $Lang->{'Module to show checklists in tickets.'} = '';
-    $Lang->{'Shows a link in the menu to print a ticket or an article in the ticket zoom view of the agent interface.'} = '';
+    $Lang->{'Module to show checklists in tickets.'} = 'Modul zur Anzeige von Checklisten in Tickets.';
+    $Lang->{'Shows a link in the ticket menu to manage the ticket checklist.'} = 'Zeigt einen Link im Ticketmenü zur Verwaltung der Ticket-Checkliste';
     $Lang->{'Checklist'} = 'Checkliste';
     $Lang->{'Maintain checklist for the ticket'} = 'Verwalten Sie eine Checkliste für das Ticket';
-    $Lang->{'Enable/Disable debugging feature.'} = '';
+    $Lang->{'Enable/Disable debugging feature.'} = 'Ein-/Ausschalten des Debuggings';
     $Lang->{'No'} = 'Nein';
     $Lang->{'Yes'} = 'Ja';
-    $Lang->{'The default state for a new checklist item.'} = '';
+    $Lang->{'The default state for a new checklist item.'} = 'Standardstatus für einen neuen Checklistenpunkt';
     $Lang->{'Frontend module registration for ticket checklist module.'} =
         'Frontendmodul-Registration für das Checklisten-Modul.';
-    $Lang->{'Maintain ticket checklists.'} = '';
-    $Lang->{'Maintain ticket checklists'} = '';
+    $Lang->{'Maintain ticket checklists.'} = 'Ticket-Checklisten verwalten.';
+    $Lang->{'Maintain ticket checklists'} = 'Ticket-Checklisten verwalten';
     $Lang->{'Frontend module registration for the checklist state administration.'} = '';
     $Lang->{'Create and manage checklist states.'} = 'Erstellen und Verwalten von Checklist Status.';
     $Lang->{'Checklist States'} = 'Checklist Status';
 
     # Custom/Kernel/Output/HTML/Templates/Standard/AdminTicketChecklistStateList.tt
-    $Lang->{'Checklist Item State Management'} = '';
-    $Lang->{'Actions'} = '';
-    $Lang->{'Add State'} = '';
-    $Lang->{'List'} = '';
-    $Lang->{'ID'} = '';
-    $Lang->{'Name'} = '';
-    $Lang->{'Valid'} = '';
-    $Lang->{'No matches found.'} = '';
+    $Lang->{'Checklist Item State Management'} = 'Checklisten Status Verwaltung';
+    $Lang->{'Actions'} = 'Aktionen';
+    $Lang->{'Add State'} = 'Status hinzufügen';
+    $Lang->{'List'} = 'Übersicht';
+    $Lang->{'ID'} = 'ID';
+    $Lang->{'Name'} = 'Name';
+    $Lang->{'Valid'} = 'Gültig';
+    $Lang->{'No matches found.'} = 'Keine Treffer gefunden.';
     $Lang->{'edit'} = 'bearbeiten';
-    $Lang->{'delete'} = '';
+    $Lang->{'delete'} = 'löschen';
 
     # Custom/Kernel/Output/HTML/Templates/Standard/AdminTicketChecklistStateForm.tt
-    $Lang->{'Go to overview'} = '';
+    $Lang->{'Go to overview'} = 'Zur Übersicht gehen';
     $Lang->{'Add/Change States'} = 'Status Hinzufügen / Ändern';
     $Lang->{'done'} = 'erledigt';
-    $Lang->{'A name is required.'} = '';
+    $Lang->{'A name is required.'} = 'Ein Name ist erforderlich';
     $Lang->{'Color'} = 'Farbe';
-    $Lang->{'A color is required.'} = '';
-    $Lang->{'Save'} = '';
-    $Lang->{'or'} = '';
-    $Lang->{'Cancel'} = '';
+    $Lang->{'A color is required.'} = 'Eine Farbe ist erforderlich';
+    $Lang->{'Save'} = 'Speichern';
+    $Lang->{'or'} = 'oder';
+    $Lang->{'Cancel'} = 'Abbrechen';
 
     # Custom/Kernel/Output/HTML/Templates/Standard/AgentTicketChecklist.tt
     $Lang->{'Manage Checklist for ticket'} = 'Verwalten Sie eine Checkliste für das Ticket';
-    $Lang->{'Cancel & close window'} = '';
-    $Lang->{'Toggle this widget'} = '';
+    $Lang->{'Cancel & close window'} = 'Abbrechen und Fenster schließen';
+    $Lang->{'Toggle this widget'} = 'Dieses Widget umschalten';
     $Lang->{'Checklist Settings'} = 'Checkliste Einstellungen';
     $Lang->{'Article #'} = 'Artikel #';
-    $Lang->{'Remove item'} = '';
-    $Lang->{'Add item'} = '';
-    $Lang->{'Submit'} = '';
+    $Lang->{'Remove item'} = 'Aufgabe löschen';
+    $Lang->{'Add item'} = 'Aufgabe hinzufügen';
+    $Lang->{'Submit'} = 'Übermitteln';
 
     # Custom/Kernel/Output/HTML/Templates/Standard/TicketChecklistWidget.tt
     $Lang->{'Show or hide the content'} = 'Inhalt anzeigen oder ausblenden';
     $Lang->{'Ticket Checklist'} = 'Ticket Checkliste';
 
     # Custom/Kernel/Modules/AgentTicketChecklist.pm
-    $Lang->{'No TicketID is given!'} = '';
-    $Lang->{'Please contact the admin.'} = '';
-    $Lang->{'You need %s permissions!'} = '';
+    $Lang->{'No TicketID is given!'} = 'Keine TicketID übermittelt!';
+    $Lang->{'Please contact the admin.'} = 'Bitte kontaktieren Sie ihren Administrator';
+    $Lang->{'You need %s permissions!'} = 'Sie benötigen die %s-Berechtigung!';
 
     # TicketChecklist.sopm (default TicketChecklist states)
-    $Lang->{'open'} = '';
-    $Lang->{'done'} = '';
-    $Lang->{'rejected'} = '';
-    $Lang->{'in progress'} = '';
+    $Lang->{'open'} = 'offen';
+    $Lang->{'done'} = 'erledigt';
+    $Lang->{'rejected'} = 'abgelehnt';
+    $Lang->{'in progress'} = 'in Bearbeitung';
 
     return 1;
 }
