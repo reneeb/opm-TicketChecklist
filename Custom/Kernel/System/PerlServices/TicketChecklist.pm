@@ -102,8 +102,8 @@ sub TicketChecklistAdd {
         return;
     }
 
-    $Param{ArticleID}     //= 0;
-    $Param{ArticleNumber} //= 0;
+    $Param{ArticleID}     ||= 0;
+    $Param{ArticleNumber} ||= 0;
 
     # insert new item
     return if !$DBObject->Do(
@@ -189,8 +189,8 @@ sub TicketChecklistUpdate {
         $Param{StatusID} = $StatusObject->TicketChecklistStatusLookup( Name => $Param{Status} );
     }
 
-    $Param{ArticleID}     //= 0;
-    $Param{ArticleNumber} //= 0;
+    $Param{ArticleID}     ||= 0;
+    $Param{ArticleNumber} ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
