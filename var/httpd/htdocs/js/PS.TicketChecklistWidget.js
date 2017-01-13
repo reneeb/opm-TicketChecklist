@@ -65,6 +65,10 @@ PS.TicketChecklistWidget = (function (TargetNS) {
     TargetNS.Init();
 
     TargetNS.GotoArticle = function( ArticleID ) {
+        if ( $('.AllArticles').hasClass('Active') ) {
+            window.location.hash = 'Article' + ArticleID;
+        }
+
         window.location.hash = ArticleID;
         Core.Agent.TicketZoom.CheckURLHash();
     };
