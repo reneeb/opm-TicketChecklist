@@ -114,6 +114,9 @@
             <ColumnAdd Name="article_id" Required="false" Type="SMALLINT" />
             <ColumnAdd Name="article_number" Required="false" Type="SMALLINT" />
         </TableAlter>
+        <TableAlter Name="ps_ticketchecklist" Version="0.5.9">
+            <ColumnChange NameNew="article_id" NameOld="article_id" Required="false" Type="INTEGER" />
+        </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
         <TableDrop Name="ps_ticketchecklist_status" />

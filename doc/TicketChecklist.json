@@ -148,6 +148,14 @@
                 { "name": "article_id", "required": "false", "type": "SMALLINT" },
                 { "name": "article_number", "required": "false", "type": "SMALLINT" }
             ]
+        },
+        {
+            "type": "ColumnChange",
+            "version": "0.5.9",
+            "name": "ps_ticketchecklist",
+            "columns": [
+                { "old_name": "article_id", "new_name": "article_id", "required": "false", "type": "INTEGER" }
+            ]
         }
     ],
     "intro": [
