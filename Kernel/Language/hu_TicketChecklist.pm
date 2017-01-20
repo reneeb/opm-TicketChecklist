@@ -26,8 +26,8 @@ sub Data {
 
     # Kernel/Config/Files/TicketChecklist.xml
     $Lang->{'Module to show checklists in tickets.'} = 'Egy modul ellenőrzőlisták megjelenítéséhez a jegyekben.';
-    $Lang->{'Shows a link in the menu to print a ticket or an article in the ticket zoom view of the agent interface.'} =
-        'Egy hivatkozást jelenít meg a menüben egy jegy vagy egy bejegyzés nyomtatásához az ügyintézői felület jegynagyítás nézetében.';
+    $Lang->{'Shows a link in the ticket menu to manage the ticket checklist.'} =
+        'Egy hivatkozást jelenít meg a jegymenüben a jegy ellenőrzőlista kezeléséhez.';
     $Lang->{'Checklist'} = 'Ellenőrzőlista';
     $Lang->{'Maintain checklist for the ticket'} = 'Ellenőrzőlista karbantartása a jegynél';
     $Lang->{'Enable/Disable debugging feature.'} = 'Hibakeresési funkció engedélyezése vagy letiltása.';
