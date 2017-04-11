@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.36) -->
     <Name>TicketChecklist</Name>
-    <Version>0.5.9</Version>
+    <Version>0.5.10</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -23,6 +23,7 @@
         <File Permission="644" Location="Kernel/Config/Files/TicketChecklist.xml" />
         <File Permission="644" Location="Kernel/Language/de_TicketChecklist.pm" />
         <File Permission="644" Location="Kernel/Language/hu_TicketChecklist.pm" />
+        <File Permission="644" Location="Kernel/Language/nb_NO_TicketChecklist.pm" />
         <File Permission="644" Location="doc/TicketChecklist.json" />
         <File Permission="644" Location="doc/en/TicketChecklist.pod" />
         <File Permission="644" Location="doc/hu/TicketChecklist.pod" />
