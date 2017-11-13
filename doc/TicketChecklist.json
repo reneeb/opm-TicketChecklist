@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.5.12",
+    "version": "0.5.13",
     "framework": [
         "5.0.x"
     ],
@@ -25,7 +25,7 @@
                 { "name": "position", "required": "true", "type": "SMALLINT" },
                 { "name": "status_id", "required": "true", "type": "INTEGER" },
                 { "name": "ticket_id", "required": "true", "type": "BIGINT" },
-                { "name": "article_id", "required": "false", "type": "SMALLINT" },
+                { "name": "article_id", "required": "false", "type": "INTEGER" },
                 { "name": "article_number", "required": "false", "type": "SMALLINT" },
                 { "name": "create_time", "required": "true", "type": "DATE" },
                 { "name": "create_by", "required": "true", "type": "INTEGER" },
