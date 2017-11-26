@@ -16,6 +16,7 @@ our @ObjectDependencies = qw(
     Kernel::Config
     Kernel::Output::HTML::Layout
     Kernel::System::Ticket
+    Kernel::System::Ticket::Article
     Kernel::System::Web::Request
     Kernel::System::PerlServices::TicketChecklist
     Kernel::System::PerlServices::TicketChecklistStatus
@@ -41,6 +42,7 @@ sub Run {
 
     my $LayoutObject    = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $TicketObject    = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $ArticleObject   = $Kernel::OM->Get('Kernel::System::Ticket::Article');
     my $ParamObject     = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
     my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
@@ -114,7 +116,7 @@ sub Run {
 
         my @ChecklistItems;
 
-        my @ArticleBox = $TicketObject->ArticleGet(
+        my @ArticleBox = $ArticleObject->ArticleList(
             TicketID => $Self->{TicketID},
             UserID   => $Self->{UserID},
         );

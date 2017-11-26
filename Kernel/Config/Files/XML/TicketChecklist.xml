@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="2.0" init="Application">
+    <Setting Name="Frontend::Output::FilterContent###OutputFilterTicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Module to show checklists in tickets.</Description>
+        <Navigation>TicketChecklist::Frontend::Base::OutputFilter</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::FilterContent::TicketChecklist</Item>
+                <Item Key="Debug">0</Item>
+                <Item Key="Templates">
+                    <Hash>
+                        <Item Key="AgentTicketZoom">1</Item>
+                    </Hash>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::Frontend::MenuModule###212-Checklist" Required="0" Valid="1">
+        <Description Translatable="1">Shows a link in the ticket menu to manage the ticket checklist.</Description>
+        <Navigation>TicketChecklist::Frontend::Agent::View::TicketZoom::MenuModule</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::TicketMenu::Generic</Item>
+                <Item Key="Name" Translatable="1">Checklist</Item>
+                <Item Key="Description" Translatable="1">Maintain checklist for the ticket</Item>
+                <Item Key="Action">AgentTicketChecklist</Item>
+                <Item Key="Link">Action=AgentTicketChecklist;TicketID=[% Data.TicketID | html %]</Item>
+                <Item Key="LinkParam"></Item>
+                <Item Key="Target"></Item>
+                <Item Key="PopupType">TicketAction</Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="TicketChecklist::Debug" Required="0" Valid="1">
+        <Description Translatable="1">Enable/Disable debugging feature.</Description>
+        <Navigation>TicketChecklist::Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="TicketChecklist::DefaultState" Required="0" Valid="1">
+        <Description Translatable="1">The default state for a new checklist item.</Description>
+        <Navigation>TicketChecklist::Checklist</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="">open</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AgentTicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for ticket checklist module.</Description>
+        <Navigation>TicketChecklist::Frontend::Agent::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>users</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="Description" Translatable="1">Maintain ticket checklists.</Item>
+                    <Item Key="NavBarName">Ticket</Item>
+                    <Item Key="Title" Translatable="1">Maintain ticket checklists</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Loader::Module::AgentTicketChecklist###002-TicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Loader module registration for the agent interface.</Description>
+        <Navigation>TicketChecklist::Frontend::Agent::ModuleRegistration::Loader</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="JavaScript">
+                    <Array>
+                        <Item>PS.TicketChecklist.js</Item>
+                    </Array>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AgentTicketChecklist###002-TicketChecklist" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>TicketChecklist::Frontend::Agent::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AdminTicketChecklistStates" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the checklist state administration.</Description>
+        <Navigation>TicketChecklist::Frontend::Admin::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>admin</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="Description" Translatable="1">Create and manage checklist states.</Item>
+                    <Item Key="Title" Translatable="1">Checklist States</Item>
+                    <Item Key="NavBarName">Admin</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AdminTicketChecklistStates###002-TicketChecklist" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>TicketChecklist::Frontend::Admin::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::NavigationModule###AdminTicketChecklistStates" Required="0" Valid="1">
+        <Description Translatable="1">Admin area navigation for the agent interface.</Description>
+        <Navigation>TicketChecklist::Frontend::Admin::ModuleRegistration::AdminOverview</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Group">
+                    <Array>
+                        <Item>admin</Item>
+                    </Array>
+                </Item>
+                <Item Key="GroupRo">
+                    <Array>
+                    </Array>
+                </Item>
+                <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
+                <Item Key="Name" Translatable="1">Checklist States</Item>
+                <Item Key="Block">System</Item>
+                <Item Key="Description" Translatable="1">Create and manage checklist states.</Item>
+                <Item Key="IconBig"></Item>
+                <Item Key="IconSmall"></Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Ticket::CustomModule###10001-TicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Overloads (redefines) existing functions in Kernel::System::Ticket. Used to easily add customizations.</Description>
+        <Navigation>TicketChecklist::Core::Ticket</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="">Kernel::System::Ticket::Custom::TicketChecklist</Item>
+        </Value>
+    </Setting>
+</otrs_config>
