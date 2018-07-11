@@ -156,4 +156,13 @@
             <Item ValueType="String" ValueRegex="">Kernel::System::Ticket::Custom::TicketChecklist</Item>
         </Value>
     </Setting>
+    <Setting Name="ACLKeysLevel3::Actions###100-Default-Checklist" Required="0" Valid="1">
+        <Description Translatable="1">Defines which items are available for 'Action' in third level of the ACL structure.</Description>
+        <Navigation>Core::Ticket::ACL</Navigation>
+        <Value>
+            <Array>
+                <Item>AgentTicketChecklist</Item>
+            </Array>
+        </Value>
+    </Setting>
 </otrs_config>
