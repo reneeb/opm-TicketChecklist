@@ -285,8 +285,17 @@ sub TicketChecklistStatusList {
 
     my $SQL = 'SELECT id, name FROM ps_ticketchecklist_status';
 
+    $Param{Valid} //= 1;
+
+    my @Bind;
+    if ( $Param{Valid} ) {
+        $SQL .= ' WHERE valid_id = ?';
+        push @Bind, \1;
+    }
+
     return if !$DBObject->Prepare(
-        SQL => $SQL,
+        SQL  => $SQL,
+        Bind => \@Bind,
     );
 
     my %StatusList;

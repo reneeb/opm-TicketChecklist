@@ -214,7 +214,7 @@ sub _MaskForm {
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
-        my %StateList = $StatusObject->TicketChecklistStatusList();
+        my %StateList = $StatusObject->TicketChecklistStatusList( Valid => 0 );
 
         if ( !%StateList ) {
             $LayoutObject->Block(
