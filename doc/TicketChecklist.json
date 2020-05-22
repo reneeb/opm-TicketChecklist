@@ -1,6 +1,6 @@
 {
     "name": "TicketChecklist",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "framework": [
         "6.0.x"
     ],
@@ -80,6 +80,42 @@
                     "name": "valid",
                     "references": [
                         { "local": "valid_id", "foreign": "id" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "TableCreate",
+            "version": [ 0, "6.0.11" ],
+            "name": "ps_checklist_ticket_info",
+            "columns": [
+                { "name": "ticket_id", "required": "true", "type": "BIGINT" },
+                { "name": "customer_visibility", "required": "true", "type": "INTEGER" },
+                { "name": "create_time", "required": "true", "type": "DATE" },
+                { "name": "create_by", "required": "true", "type": "INTEGER" },
+                { "name": "change_time", "required": "true", "type": "DATE" },
+                { "name": "change_by", "required": "true", "type": "INTEGER" }
+            ],
+            "unique" : [
+                {
+                    "name": "uq_ticket_id",
+                    "columns": [
+                        "ticket_id"
+                    ]
+                }
+            ],
+            "keys" : [
+                {
+                    "name": "users",
+                    "references": [
+                        { "local": "create_by", "foreign": "id" },
+                        { "local": "change_by", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "ticket",
+                    "references": [
+                        { "local": "ticket_id", "foreign": "id" }
                     ]
                 }
             ]

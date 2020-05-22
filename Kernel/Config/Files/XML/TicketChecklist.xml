@@ -156,4 +156,69 @@
             <Item ValueType="String" ValueRegex="">Kernel::System::Ticket::Custom::TicketChecklist</Item>
         </Value>
     </Setting>
+    <Setting Name="Frontend::Module###AgentTicketChecklistCustomerVisibility" Required="0" Valid="1">
+        <Description Lang="en">Frontend module registration for calendar module.</Description>
+        <Description Lang="de">Frontendmodul-Registration für das Kalender-Modul.</Description>
+        <Navigation>PerlServices::TicketChecklist::Frontend::Agent::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Description">TicketChecklist Customer Visibility</Item>
+                    <Item Key="NavBarName">Ticket</Item>
+                    <Item Key="Title">TicketChecklist Customer Visibility</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AgentTicketChecklistCustomerVisibility###002-TicketChecklist" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>PerlServices::TicketChecklist::Frontend::Agent::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="TicketChecklist::Feature::CustomerVisibility" Required="0" Valid="1">
+        <Description Translatable="1">If enabled, the agents can allow customers to see checklist in the customer portal.</Description>
+        <Navigation>PerlServices::TicketChecklist::Features</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Output::FilterElementPost###CustomerTicketChecklist" Required="0" Valid="1">
+        <Description Translatable="1">Module to show checklist in Customer ticket zoom.</Description>
+        <Navigation>PerlServices::TicketChecklist::Frontend::Base::OutputFilter</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::FilterElementPost::CustomerTicketChecklist</Item>
+                <Item Key="Debug">0</Item>
+                <Item Key="Templates">
+                    <Hash>
+                        <Item Key="CustomerTicketZoom">1</Item>
+                    </Hash>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Loader::Customer::CommonCSS###100001-TicketChecklist" Required="1" Valid="1">
+        <Description Translatable="1">List of CSS files to always be loaded for the agent interface.</Description>
+        <Navigation>PerlServices::TicketChecklist::Frontend::Base</Navigation>
+        <Value>
+            <Array>
+                <Item>PS.Checklist.CustomerZoom.css</Item>
+            </Array>
+        </Value>
+    </Setting>
 </otrs_config>

@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.4) -->
     <Name>TicketChecklist</Name>
-    <Version>0.6.2</Version>
+    <Version>0.6.3</Version>
     <Framework>6.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -13,13 +13,17 @@
     <Filelist>
         <File Permission="644" Location="Custom/Kernel/Modules/AdminTicketChecklistStates.pm" />
         <File Permission="644" Location="Custom/Kernel/Modules/AgentTicketChecklist.pm" />
+        <File Permission="644" Location="Custom/Kernel/Modules/AgentTicketChecklistCustomerVisibility.pm" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/FilterContent/TicketChecklist.pm" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/FilterElementPost/CustomerTicketChecklist.pm" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/AdminTicketChecklistStateForm.tt" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/AdminTicketChecklistStateList.tt" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/AgentTicketChecklist.tt" />
+        <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/CustomerTicketChecklistWidget.tt" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/TicketChecklistWidget.tt" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklist.pm" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistStatus.pm" />
+        <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistTicketInfo.pm" />
         <File Permission="644" Location="Custom/Kernel/System/Ticket/Custom/TicketChecklist.pm" />
         <File Permission="644" Location="Kernel/Config/Files/TicketChecklist.xml" />
         <File Permission="644" Location="Kernel/Config/Files/XML/TicketChecklist.xml" />
@@ -33,6 +37,7 @@
         <File Permission="644" Location="var/httpd/htdocs/js/PS.TicketChecklistWidget.js" />
         <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/img/ps/arrow_down.png" />
         <File Permission="644" Location="var/httpd/htdocs/skins/Agent/default/img/ps/arrow_up.png" />
+        <File Permission="644" Location="var/httpd/htdocs/skins/Customer/default/css/PS.Checklist.CustomerZoom.css" />
     </Filelist>
     <DatabaseInstall Type="post">
         <TableCreate Name="ps_ticketchecklist">
@@ -75,6 +80,24 @@
                 <Reference Local="valid_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
+        <TableCreate Name="ps_checklist_ticket_info">
+            <Column Name="ticket_id" Required="true" Type="BIGINT" />
+            <Column Name="customer_visibility" Required="true" Type="INTEGER" />
+            <Column Name="create_time" Required="true" Type="DATE" />
+            <Column Name="create_by" Required="true" Type="INTEGER" />
+            <Column Name="change_time" Required="true" Type="DATE" />
+            <Column Name="change_by" Required="true" Type="INTEGER" />
+            <Unique Name="ticket_id">
+                <UniqueColumn Name="ticket_id" />
+            </Unique>
+            <ForeignKey ForeignTable="users">
+                <Reference Local="create_by" Foreign="id" />
+                <Reference Local="change_by" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="ticket">
+                <Reference Local="ticket_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
         <Insert Table="ps_ticketchecklist_status">
             <Data Key="name" Type="Quote"><![CDATA[open]]></Data>
             <Data Key="valid_id">1</Data>
@@ -113,6 +136,24 @@
         </Insert>
     </DatabaseInstall>
     <DatabaseUpgrade Type="post">
+        <TableCreate Name="ps_checklist_ticket_info" Version="6.0.11">
+            <Column Name="ticket_id" Required="true" Type="BIGINT" />
+            <Column Name="customer_visibility" Required="true" Type="INTEGER" />
+            <Column Name="create_time" Required="true" Type="DATE" />
+            <Column Name="create_by" Required="true" Type="INTEGER" />
+            <Column Name="change_time" Required="true" Type="DATE" />
+            <Column Name="change_by" Required="true" Type="INTEGER" />
+            <Unique Name="ticket_id">
+                <UniqueColumn Name="ticket_id" />
+            </Unique>
+            <ForeignKey ForeignTable="users">
+                <Reference Local="create_by" Foreign="id" />
+                <Reference Local="change_by" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="ticket">
+                <Reference Local="ticket_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
         <TableAlter Name="ps_ticketchecklist" Version="0.5.3">
             <ColumnAdd Name="article_id" Required="false" Type="SMALLINT" />
             <ColumnAdd Name="article_number" Required="false" Type="SMALLINT" />
@@ -122,6 +163,7 @@
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
+        <TableDrop Name="ps_checklist_ticket_info" />
         <TableDrop Name="ps_ticketchecklist_status" />
         <TableDrop Name="ps_ticketchecklist" />
     </DatabaseUninstall>
