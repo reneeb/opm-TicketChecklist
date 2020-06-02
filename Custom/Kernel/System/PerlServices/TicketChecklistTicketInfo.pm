@@ -44,6 +44,71 @@ sub new {
     return $Self;
 }
 
+=item DeleteInfoForTicket()
+
+Delete all information for a ticket
+
+=cut
+
+sub DeleteInfoForTicket {
+    my ( $Self, %Param ) = @_;
+
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
+    for my $Needed (qw(TicketID)) {
+        if ( !$Param{$Needed} ) {
+            $LogObject->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!",
+            );
+            return;
+        }
+    }
+
+    return if !$DBObject->Do(
+        SQL  => 'DELETE FROM ps_checklist_ticket_info WHERE ticket_id = ?',
+        Bind => [ \$Param{TicketID} ],
+    );
+
+    return 1;
+}
+
+=item GetInfo()
+
+Get all information for a ticket
+
+=cut
+
+sub GetInfo {
+    my ( $Self, %Param ) = @_;
+
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
+    for my $Needed (qw(TicketID)) {
+        if ( !$Param{$Needed} ) {
+            $LogObject->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!",
+            );
+            return;
+        }
+    }
+
+    return if !$DBObject->Prepare(
+        SQL  => 'SELECT customer_visibility FROM ps_checklist_ticket_info WHERE ticket_id = ?',
+        Bind => [ \$Param{TicketID} ],
+    );
+
+    my %Info;
+    while ( my @Row = $DBObject->FetchrowArray() ) {
+        $Info{CustomerVisibility} = $Row[0];
+    }
+
+    return %Info;
+}
+
 =item SetInfo()
 
 Add status

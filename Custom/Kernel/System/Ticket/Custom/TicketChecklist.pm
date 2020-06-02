@@ -22,10 +22,15 @@ our $ObjectManagerDisabled = 1;
     *Kernel::System::Ticket::TicketDelete = sub {
         my ( $Self, %Param ) = @_;
 
-        my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
+        my $ChecklistObject  = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
+        my $TicketInfoObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistTicketInfo');
 
         # check needed stuff
         if ( $Param{UserID} && $Param{TicketID} ) {
+            $TicketInfoObject->DeleteInfoForTicket(
+                TicketID => $Param{TicketID},
+            );
+
             $ChecklistObject->TicketChecklistDelete(
                 TicketID => $Param{TicketID},
             );
