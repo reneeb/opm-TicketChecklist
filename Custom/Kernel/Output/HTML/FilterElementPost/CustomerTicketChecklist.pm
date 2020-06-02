@@ -22,6 +22,7 @@ our @ObjectDependencies = qw(
     Kernel::Config
     Kernel::System::User
     Kernel::System::PerlServices::TicketChecklist
+    Kernel::System::PerlServices::TicketChecklistTicketInfo
     Kernel::System::PerlServices::TicketChecklistStatus
 );
 
@@ -40,13 +41,14 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my $ParamObject     = $Kernel::OM->Get('Kernel::System::Web::Request');
-    my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
-    my $StatusObject    = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
-    my $LayoutObject    = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-    my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
-    my $TicketObject    = $Kernel::OM->Get('Kernel::System::Ticket');
-    my $LogObject       = $Kernel::OM->Get('Kernel::System::Log');
+    my $ParamObject      = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $ChecklistObject  = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
+    my $TicketInfoObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistTicketInfo');
+    my $StatusObject     = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+    my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $ConfigObject     = $Kernel::OM->Get('Kernel::Config');
+    my $TicketObject     = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
 
     # define if rich text should be used
     my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
@@ -62,6 +64,14 @@ sub Run {
     return 1 if !$TicketID;
 
     $Self->{UserID} //= $LayoutObject->{UserID};
+
+    my %Info = $TicketInfoObject->GetInfo(
+        TicketID => $TicketID,
+    );
+
+    return 1 if !%Info;
+    return 1 if !$Info{CustomerVisibility};
+
 
     my @ChecklistItems = $ChecklistObject->TicketChecklistTicketGet(
         TicketID => $TicketID,
