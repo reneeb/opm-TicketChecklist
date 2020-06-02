@@ -18,6 +18,7 @@ our @ObjectDependencies = qw(
     Kernel::System::Ticket
     Kernel::System::Web::Request
     Kernel::System::PerlServices::TicketChecklist
+    Kernel::System::PerlServices::TicketChecklistTicketInfo
     Kernel::System::PerlServices::TicketChecklistStatus
 );
 
@@ -36,11 +37,12 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my $ParamObject     = $Kernel::OM->Get('Kernel::System::Web::Request');
-    my $ChecklistObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
-    my $StatusObject    = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
-    my $LayoutObject    = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-    my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
+    my $ParamObject      = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $ChecklistObject  = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist');
+    my $TicketInfoObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistTicketInfo');
+    my $StatusObject     = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
+    my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $ConfigObject     = $Kernel::OM->Get('Kernel::Config');
 
     # get template name
     #my $Templatename = $Param{TemplateFile} || '';
@@ -101,10 +103,15 @@ sub Run {
         }
     }
 
+    my %Info = $TicketInfoObject->GetInfo(
+        TicketID => $TicketID,
+    );
+
     my $Snippet = $LayoutObject->Output(
         TemplateFile => 'TicketChecklistWidget',
         Data         => {
-            TicketID => $TicketID,
+            TicketID                  => $TicketID,
+            CustomerVisibilityChecked => ( $Info{CustomerVisibility} ? 'checked="checked"' : '' ),
         },
     );
 
