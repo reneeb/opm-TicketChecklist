@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.4) -->
     <Name>TicketChecklist</Name>
-    <Version>0.6.4</Version>
+    <Version>0.6.5</Version>
     <Framework>6.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -22,6 +22,7 @@
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/CustomerTicketChecklistWidget.tt" />
         <File Permission="644" Location="Custom/Kernel/Output/HTML/Templates/Standard/TicketChecklistWidget.tt" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklist.pm" />
+        <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklist/Event/RemoveTicketInfoFlags.pm" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistStatus.pm" />
         <File Permission="644" Location="Custom/Kernel/System/PerlServices/TicketChecklistTicketInfo.pm" />
         <File Permission="644" Location="Custom/Kernel/System/Ticket/Custom/TicketChecklist.pm" />
