@@ -18,8 +18,6 @@
     </div>
 
     <div class="Content">
-        <div class="LayoutFixedSidebar SidebarLast">
-            <div class="ContentColumn">
                 <div class="WidgetSimple Expanded">
 
                     <div class="Header">
@@ -29,7 +27,7 @@
                         <h2>[% Translate("Checklist Settings") | html %]</h2>
                     </div>
                     <div class="Content">
-                        <fieldset class="TableLike">
+                        <fieldset class="TableLike FixedLabel">
                             <input type="hidden" name="Action" value="[% Env("Action") %]"/>
                             <input type="hidden" name="Subaction" value="Save"/>
                             <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]" id="TicketID"/>
@@ -60,15 +58,11 @@
 
                     </div>
                 </div>
-                <div class="WidgetSimple">
-                    <div class="Content">
-                        <fieldset class="TableLike">
-                            <button class="CallForAction Primary" id="Submit" accesskey="g" title="[% Translate("Submit") | html %] (g)" type="submit" value="Submit"><span><i class="fa fa-check-square-o"></i>[% Translate("Submit") | html %]</span></button></fieldset>
-                    </div></div>
+                    <div class="Footer">
+                            <button class="CallForAction Primary" id="Submit" accesskey="g" title="[% Translate("Submit") | html %] (g)" type="submit" value="Submit"><span><i class="fa fa-check-square-o"></i>[% Translate("Submit") | html %]</span></button>
+                    </div>
             </div>
-        </div>
         <div id="ChecklistTickets"></div>
-    </div>
 </div>
 </form>
 [% WRAPPER JSOnDocumentComplete %]
