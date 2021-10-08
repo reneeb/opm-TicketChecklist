@@ -1,8 +1,9 @@
 {
     "name": "TicketChecklist",
-    "version": "0.6.5",
+    "version": "0.6.6",
     "framework": [
-        "6.0.x"
+        "6.0.x",
+        "6.1.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
