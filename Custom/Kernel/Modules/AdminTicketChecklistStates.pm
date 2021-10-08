@@ -168,9 +168,14 @@ sub Run {
     }
 
     elsif ( $Self->{Subaction} eq 'Delete' ) {
-        $StatusObject->TicketChecklistStatusDelete( %GetParam );
+        my $Success = $StatusObject->TicketChecklistStatusDelete( %GetParam );
 
-        return $LayoutObject->Redirect( OP => "Action=AdminTicketChecklistStates" );
+        my $ErrorParam = '';
+        if ( !$Success ) {
+            $ErrorParam = '&Error=1';
+        }
+
+        return $LayoutObject->Redirect( OP => "Action=AdminTicketChecklistStates$ErrorParam" );
     }
 
     # ------------------------------------------------------------ #
@@ -214,7 +219,7 @@ sub _MaskForm {
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
-        my %StateList = $StatusObject->TicketChecklistStatusList();
+        my %StateList = $StatusObject->TicketChecklistStatusList( Valid => 0 );
 
         if ( !%StateList ) {
             $LayoutObject->Block(

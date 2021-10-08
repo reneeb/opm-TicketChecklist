@@ -1,13 +1,12 @@
 # --
-# Kernel/Output/HTML/FilterContent/TicketChecklist.pm
-# Copyright (C) 2014-2016 Perl-Services.de, http://www.perl-services.de/
+# Copyright (C) 2020 Perl-Services.de, http://www.perl-services.de/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-package Kernel::Output::HTML::FilterContent::TicketChecklist;
+package Kernel::Output::HTML::FilterElementPost::CustomerTicketChecklist;
 
 use strict;
 use warnings;
@@ -16,7 +15,12 @@ use List::Util qw(first);
 
 our @ObjectDependencies = qw(
     Kernel::System::Ticket
+    Kernel::System::Log
+    Kernel::System::Main
     Kernel::System::Web::Request
+    Kernel::Output::HTML::Layout
+    Kernel::Config
+    Kernel::System::User
     Kernel::System::PerlServices::TicketChecklist
     Kernel::System::PerlServices::TicketChecklistTicketInfo
     Kernel::System::PerlServices::TicketChecklistStatus
@@ -43,24 +47,42 @@ sub Run {
     my $StatusObject     = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklistStatus');
     my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $ConfigObject     = $Kernel::OM->Get('Kernel::Config');
-
-    # get template name
-    #my $Templatename = $Param{TemplateFile} || '';
-    my $Templatename = $ParamObject->GetParam( Param => 'Action' );
-
-    return 1 if !$Templatename;
-    return 1 if !$Param{Templates}->{$Templatename};
+    my $TicketObject     = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
 
     # define if rich text should be used
     my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
 
+    if ( !$TicketID ) {
+        my ($TicketNumber) = $ParamObject->GetParam( Param => 'TicketNumber' );
+        $TicketID          = $TicketObject->TicketIDLookup(
+            TicketNumber => $TicketNumber,
+            UserID       => $Self->{UserID} // $LayoutObject->{UserID},
+        );
+    }
+
     return 1 if !$TicketID;
+
+    $Self->{UserID} //= $LayoutObject->{UserID};
+
+    my %Info = $TicketInfoObject->GetInfo(
+        TicketID => $TicketID,
+    );
+
+    return 1 if !%Info;
+    return 1 if !$Info{CustomerVisibility};
+
 
     my @ChecklistItems = $ChecklistObject->TicketChecklistTicketGet(
         TicketID => $TicketID,
     );
 
     return 1 if !@ChecklistItems;
+
+    my %Ticket = $TicketObject->TicketGet(
+        TicketID => $TicketID,
+        UserID   => $Self->{UserID},
+    );
 
     my %StatusList   = $StatusObject->TicketChecklistStatusList();
     my %StatusColors;
@@ -73,14 +95,16 @@ sub Run {
         $StatusColors{$StatusID} = $StatusInfo{Color};
     }
 
+    my $ItemsShown = 0;
+
+    ITEM:
     for my $Item ( @ChecklistItems ) {
-        $Item->{StatusSelect} = $LayoutObject->BuildSelection(
-            Name        => 'ItemStatusWidget_' . $Item->{Position},
-            Data        => \%StatusList,
-            SelectedID  => $Item->{StatusID},
-            Translation => 1,
-            Class       => 'W75pc',
-        );
+        $ItemsShown++;
+
+        $Item->{StatusSelect} = sprintf "(%s)", $LayoutObject->{LanguageObject}->Translate( $StatusList{ $Item->{StatusID} } );
+
+        $Item->{ResponsibleID}  //= 0;
+        $Item->{ResponsibleKey} //= '';
 
         $Item->{Color} = $StatusColors{ $Item->{StatusID} };
 
@@ -88,51 +112,17 @@ sub Run {
             Name => 'Item',
             Data => $Item,
         );
-
-        if ( !$Item->{ArticleID} ) {
-            $LayoutObject->Block(
-                Name => 'TitlePlain',
-                Data => $Item,
-            );
-        }
-        else {
-            $LayoutObject->Block(
-                Name => 'TitleLink',
-                Data => $Item,
-            );
-        }
     }
 
-    my %Info = $TicketInfoObject->GetInfo(
-        TicketID => $TicketID,
-    );
+    return 1 if !$ItemsShown;
 
     my $Snippet = $LayoutObject->Output(
-        TemplateFile => 'TicketChecklistWidget',
-        Data         => {
-            TicketID                  => $TicketID,
-            CustomerVisibilityChecked => ( $Info{CustomerVisibility} ? 'checked="checked"' : '' ),
-        },
+        TemplateFile => 'CustomerTicketChecklistWidget',
     );
 
-    my $Position = $ConfigObject->Get( 'TicketChecklist::Position' ) || 'top';
+    ${$Param{Data}} =~ s{(<div\s+id="FollowUp")}{$Snippet $1}xms;
 
-    if ( $Position eq 'bottom' ) {
-        ${ $Param{Data} } =~ s{(</div> \s+ <div \s+ class="ContentColumn)}{ $Snippet $1 }xms;
-    }
-    else {
-        ${ $Param{Data} } =~ s{(<div \s+ class="SidebarColumn">)}{$1 $Snippet}xsm;
-    }
-
-    my $JS = $LayoutObject->Output(
-        Template => q~
-            <script type="text/javascript" src="[% Config("Frontend::JavaScriptPath") | html %]PS.TicketChecklistWidget.js"></script>
-        ~,
-    );
-
-    ${ $Param{Data} } =~ s{</body}{$JS</body};
-
-    return ${ $Param{Data} };
+    return 1;
 }
 
 1;

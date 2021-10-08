@@ -88,6 +88,10 @@ sub Data {
     $Lang->{'rejected'} = 'abgelehnt';
     $Lang->{'in progress'} = 'in Bearbeitung';
 
+    $Lang->{"State cannot be delete. A checklist item uses this state."} = 'Der Status kann nicht gelöscht werden. Eine Aufgabe nutzt noch diesen Status.';
+
+    $Lang->{"customerportal"} = "Kundenportal";
+
     return 1;
 }
 

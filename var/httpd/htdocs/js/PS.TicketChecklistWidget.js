@@ -47,6 +47,26 @@ PS.TicketChecklistWidget = (function (TargetNS) {
 
     TargetNS.Init = function() {
 
+        $('#PS-Checklist-Customer-View').bind('change', function() {
+            var is_checked = 0;
+
+            if ($(this).is(':checked') ) {
+                is_checked = 1;
+            }
+
+            var URL = Core.Config.Get('Baselink') || BaseURL;
+            $.ajax({
+                type: 'POST',
+                url: URL,
+                dataType: 'json',
+                data : {
+                    Action: 'AgentTicketChecklistCustomerVisibility',
+                    TicketID: Core.Config.Get("TicketID"),
+                    CustomerVisibility: is_checked
+                }
+            });
+        });
+
         Core.UI.InputFields.InitSelect( $('select[id^="ItemStatusWidget_"]') );
 
         $('select[name^="ItemStatusWidget"]').bind( 'change', function() {

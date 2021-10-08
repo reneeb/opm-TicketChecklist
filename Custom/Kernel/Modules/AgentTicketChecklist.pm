@@ -190,6 +190,19 @@ sub Run {
             );
         }
 
+        my $TicketID = $ParamObject->GetParam( Param => 'TicketID' );
+        if ( !$ChecklistObject->TicketChecklistTicketGet( TicketID => $TicketID ) ) {
+            my $EventObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist::Event::RemoveTicketInfoFlags');
+            $EventObject->Run(
+                Data => {
+                    TicketID => $TicketID,
+                },
+                Config => {},
+                Event  => 'TicketChecklistRemove',
+                UserID => $Self->{UserID},
+            );
+        }
+
         # redirect
         return $LayoutObject->PopupClose(
             URL => "Action=AgentTicketZoom;TicketID=$Self->{TicketID}",
@@ -229,6 +242,19 @@ sub Run {
         $ChecklistObject->TicketChecklistDelete(
             ID => $ID,
         );
+
+        my $TicketID = $ParamObject->GetParam( Param => 'TicketID' );
+        if ( !$ChecklistObject->TicketChecklistTicketGet( TicketID => $TicketID ) ) {
+            my $EventObject = $Kernel::OM->Get('Kernel::System::PerlServices::TicketChecklist::Event::RemoveTicketInfoFlags');
+            $EventObject->Run(
+                Data => {
+                    TicketID => $TicketID,
+                },
+                Config => {},
+                Event  => 'TicketChecklistRemove',
+                UserID => $Self->{UserID},
+            );
+        }
 
         return $LayoutObject->Attachment(
             ContentType => 'application/json; charset=' . $LayoutObject->{Charset},

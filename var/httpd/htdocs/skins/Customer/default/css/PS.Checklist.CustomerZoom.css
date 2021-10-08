@@ -1,0 +1,52 @@
+/*
+Copyright (C) 2020 Perl-Services.de, https://perl-services.de
+
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file COPYING for license information (GPL). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+*/
+
+@media screen,projection,tv,handheld {
+
+/**
+ * @section     Header
+ */
+
+
+#ChecklistSidebar {
+    float: right;
+    width: 18%;
+}
+
+#CustomerChecklist {
+    line-height: 20px;
+    float: right;
+    margin-right: 5px;
+    width: 100%;
+    padding: 0px 0px 7px 0px;
+    border: 1px solid #E9E9E9;
+    border-bottom: 1px solid #DDD;
+}
+
+.RTL #CustomerChecklist {
+    float: left;
+}
+
+#CustomerChecklist li {
+    padding: 2px 10px;
+}
+
+#CustomerChecklist li.Header {
+    padding: 0px;
+    margin-bottom: 7px;
+}
+
+#CustomerChecklist li.Header div.MessageHeader {
+    padding: 2px 10px 1px 10px;
+}
+
+#CustomerChecklist li .Key {
+    color: #666;
+}
+
+} /* end @media */

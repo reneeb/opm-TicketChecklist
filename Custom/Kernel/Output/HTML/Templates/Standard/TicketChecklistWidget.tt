@@ -16,6 +16,16 @@
     </div>
     <div class="Content">
                 <fieldset class="TableLike FixedLabelSmall TicketChecklist">
+[% IF Config("TicketChecklist::Feature::CustomerVisibility") %]
+            <label for="PS-Checklist-Customer-View" class="ChecklistTask">
+                [% Translate("customerportal") %]:
+            </label>
+            <p class="Value" title="Customer Visibility">
+                <input type="checkbox" id="PS-Checklist-Customer-View" [% Data.CustomerVisibilityChecked %]>
+            </p>
+            <div class="Clear"></div>
+[% END %]
+
                   <input type="hidden" id="ChecklistTicketID" name="ChecklistTicketID" value="[% Data.TicketID | html %]" />
 [% RenderBlockStart("Item") %]
 [% RenderBlockStart("TitleLink") %]
