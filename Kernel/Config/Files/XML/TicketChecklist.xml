@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<otrs_config version="2.0" init="Application">
+<otobo_config version="2.0" init="Application">
     <Setting Name="Frontend::Output::FilterContent###OutputFilterTicketChecklist" Required="0" Valid="1">
         <Description Translatable="1">Module to show checklists in tickets.</Description>
         <Navigation>TicketChecklist::Frontend::Base::OutputFilter</Navigation>
@@ -230,4 +230,4 @@
             </Array>
         </Value>
     </Setting>
-</otrs_config>
+</otobo_config>
