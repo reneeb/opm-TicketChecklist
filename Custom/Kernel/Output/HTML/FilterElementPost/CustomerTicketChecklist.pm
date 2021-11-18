@@ -120,7 +120,7 @@ sub Run {
         TemplateFile => 'CustomerTicketChecklistWidget',
     );
 
-    ${$Param{Data}} =~ s{(<div\s+id="FollowUp")}{$Snippet $1}xms;
+    ${$Param{Data}} =~ s{(</div>\s+<div\s+id='oooMore')}{$Snippet $1}xms;
 
     return 1;
 }

@@ -7,14 +7,9 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-<div id="ChecklistSidebar">
-    <ul id="CustomerChecklist">
-        <li class="Header">
-            <div class="MessageHeader">
-                <h3>[% Translate("Ticket Checklist") | html %]</h3>
-                <div class="Clear"></div>
-            </div>
-        </li>
+<div class="oooSection">
+    <h3>[% Translate("Ticket Checklist") | html %]</h3>
+    <ul>
 [% RenderBlockStart("Item") %]
         <li><span class="Key">[% Data.Title | html %]:</span> 
             <span style="background-color: [% Data.Color | html %]">
