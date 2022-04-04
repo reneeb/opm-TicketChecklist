@@ -1,9 +1,10 @@
 {
     "name": "TicketChecklist",
-    "version": "1.10.1",
+    "version": "1.10.2",
     "product": "otobo",
     "framework": [
-        "10.0.x"
+        "10.0.x",
+        "10.1.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",

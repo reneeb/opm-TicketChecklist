@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otobo_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.44) -->
+    <!-- GENERATED WITH OPM::Maker::Command::sopm (1.1.0) -->
     <Name>TicketChecklist</Name>
-    <Version>1.10.1</Version>
+    <Version>1.10.2</Version>
     <Framework>10.0.x</Framework>
+    <Framework>10.1.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Eine Checkliste für Tickets.</Description>
