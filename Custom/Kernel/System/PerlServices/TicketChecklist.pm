@@ -1,6 +1,6 @@
 # --
 # Kernel/System/PerlServices/TicketChecklist.pm - All TicketChecklist related functions should be here eventually
-# Copyright (C) 2014 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2014 - 2022 Perl-Services.de, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you

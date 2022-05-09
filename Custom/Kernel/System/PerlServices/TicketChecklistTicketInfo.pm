@@ -1,6 +1,6 @@
 # --
 # Kernel/System/PerlServices/TicketChecklistTicketInfo.pm 
-# Copyright (C) 2020 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2020 - 2022 Perl-Services.de, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
