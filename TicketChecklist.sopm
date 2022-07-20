@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.44) -->
+    <!-- GENERATED WITH OPM::Maker::Command::sopm (1.1.0) -->
     <Name>TicketChecklist</Name>
-    <Version>0.6.7</Version>
+    <Version>0.6.8</Version>
     <Framework>6.0.x</Framework>
     <Framework>6.1.x</Framework>
     <Framework>6.2.x</Framework>
+    <Framework>6.3.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
-    <URL>http://www.perl-services.de</URL>
+    <URL>https://www.perl-services.de</URL>
     <Description Lang="de">Eine Checkliste für Tickets.</Description>
     <Description Lang="en">Add a checklist to tickets.</Description>
     <Description Lang="hu">Egy ellenőrzőlista hozzáadása a jegyekhez.</Description>
